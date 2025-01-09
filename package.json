@@ -4,12 +4,15 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "run-p dev:api dev:site",
+    "dev:api": "tsx watch src/api/index.ts --clear-screen",
+    "dev:site": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@hono/node-server": "^1.13.7",
     "@tailwindcss/vite": "^4.0.0-beta.8",
     "hono": "^4.6.16",
     "react": "^18.3.1",
@@ -26,6 +29,8 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "npm-run-all": "^4.1.5",
+    "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "typescript-eslint": "^8.18.2",
     "vite": "^6.0.5"
