@@ -1,15 +1,15 @@
 import { serve } from '@hono/node-server'
 import { Hono } from 'hono';
 
-const app = new Hono();
+const api = new Hono().basePath('/api');
 
-app.get('/', (c) => {
+api.get('/', (c) => {
   return c.text('Hello, world!');
 });
 
-console.log(`Server is running on port 3000`);
-
 serve({
-  fetch: app.fetch,
+  fetch: api.fetch,
   port: 3000,
 });
+
+console.log('Server is running on port 3000');
