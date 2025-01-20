@@ -5,8 +5,10 @@ import tailwindcss from '@tailwindcss/vite';
 // https://vite.dev/config/
 export default defineConfig({
   server: {
+    port: 5173,
+    strictPort: true,
     proxy: {
-      '/api': 'http://localhost:3000', // Hono サーバーへのプロキシ
+      '/api': 'http://localhost:3000', // Honoサーバーへのプロキシ
     },
   },
   plugins: [

@@ -3,3 +3,7 @@
 @theme {
   --font-display: 'Roboto', sans-serif;
 }
+
+#root {
+  isolation: isolate;
+}
