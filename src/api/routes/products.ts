@@ -1,50 +1,46 @@
 import { Hono } from 'hono';
-import { validator } from 'hono/validator';
+import { z } from 'zod'
+import { zValidator } from '@hono/zod-validator'
 import { turso } from '../libs';
 
 const app = new Hono();
 
-const validateProduct = validator('json', (value, c) => {
-  const { name, brand_id } = value;
+// PRAGMA table_info('brands');
+// 0 id INTEGER
+// 1 brand_id INTEGER NOT NULL
+// 2 name TEXT NOT NULL
+// 3 created_at DATETIME
 
-  if (typeof name !== 'string' || name.trim() === '') {
-    return c.json({ success: false, error: 'Invalid name' }, 400);
-  }
-  if (typeof brand_id !== 'number' || brand_id <= 0) {
-    return c.json({ success: false, error: 'Invalid brand ID' }, 400);
-  }
-
-  return { name, brand_id };
+const productSchema = z.object({
+  name: z.string().min(1, '名前は必須です').max(50, '名前は50文字以内です'),
+  brand_id: z.number().int().positive('brand_idは正の整数である必要があります'),
 });
 
-// ブランド一覧取得
 app.get('/', async(c) => {
   try {
-    const { rows } = await turso.execute("SELECT * FROM products");
+    const { rows } = await turso.execute('SELECT * FROM products');
     return c.json({ rows });
   } catch (error) {
     return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
   }
 });
 
-// ブランド登録
-app.post('/', validateProduct, async (c) => {
-  const { name, brand_id } = c.req.valid('json');
+app.post('/', zValidator('json', productSchema), async (c) => {
+  const { brand_id, name } = c.req.valid('json');
 
   try {
     const result = await turso.execute({
       sql: 'INSERT INTO products (name, brand_id) VALUES (?, ?) RETURNING *',
-      args: [name, brand_id],
+      args: [brand_id, name],
     });
-    return c.json({ message: '製品が追加されました', data: result.rows[0] });
+    return c.json({ message: '商品が追加されました', data: result.rows[0] });
   } catch (error) {
     if (error instanceof Error) {
       if (error.message.includes('UNIQUE constraint failed')) {
-        return c.json({ success: false, error: 'すでに登録されています' }, 400);
+        return c.json({ error: '既に存在します' }, 400);
       }
-      return c.json({ success: false, error: error.message }, 500);
     }
-    return c.json({ success: false, error: '不明なエラーが発生しました' }, 500);
+    return c.json({ error: '登録失敗' }, 500);
   }
 });
 

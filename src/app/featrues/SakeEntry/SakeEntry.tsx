@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fetchData } from '../../../utils/fetchData';
 import { SuggestionList, SuggestionListProps } from '../../components/SuggestionList';
 import { TextField, TextFieldProps } from '../../components/TextField';
-import type { Sakenowa } from '../../../types';
+import type { Database, Sakenowa } from '../../../types';
 
 // type SakeEntryProps = {
 //   data: string[];
@@ -16,9 +16,12 @@ export function SakeEntry() {
   // 初回レンダリング時
   React.useEffect(() => {
     async function setFetchedData() {
-      const data = await fetchData<Sakenowa.BrandData>('/api/sakenowa/brands');
+      const data = await fetchData<{rows: Database.Brand[]}>('/api/brands');
+      // const data = await fetchData<Sakenowa.BrandData>('/api/sakenowa/brands');
+
       if (!data) return;
-      const brandNames = data.brands.map((brand) => brand.name);
+
+      const brandNames = data.rows.map((brand) => brand.name);
       setBrandList(brandNames);
     }
     setFetchedData();
@@ -67,6 +70,14 @@ export function SakeEntry() {
           placeholder="例：純米大吟醸 雪室貯蔵三年"
           onValueChange={handleSubName}
         />
+      </div>
+
+      <div>
+        <ul>
+          {brandList.map((brand) => (
+            <li key={brand}>{brand}</li>
+          ))}
+        </ul>
       </div>
     </div>
   );
