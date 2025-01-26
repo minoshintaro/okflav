@@ -1,0 +1,1 @@
+export { ProductFields } from './ProductFields';

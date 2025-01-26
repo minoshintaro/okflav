@@ -1,7 +1,11 @@
 import * as React from 'react';
-import { fetchData } from '../../../utils/fetchData';
+import { useAtom } from 'jotai';
+import { brandListAtom } from '../../store/atom';
+import { InputField } from "../../components/InputField";
 import { SuggestionList, SuggestionListProps } from '../../components/SuggestionList';
 import { TextField, TextFieldProps } from '../../components/TextField';
+import { BrandSelector } from './components/BrandSelector';
+import { ProductFields } from './components/ProductFields';
 import type { Database, Sakenowa } from '../../../types';
 
 // type SakeEntryProps = {
@@ -11,21 +15,21 @@ import type { Database, Sakenowa } from '../../../types';
 export function SakeEntry() {
   const [brandName, setBrandName] = React.useState('');
   const [subName, setSubName] = React.useState('');
-  const [brandList, setBrandList] = React.useState<string[]>([]);
+  const [brandList, setBrandList] = useAtom(brandListAtom);
 
   // 初回レンダリング時
-  React.useEffect(() => {
-    async function setFetchedData() {
-      const data = await fetchData<{rows: Database.Brand[]}>('/api/brands');
-      // const data = await fetchData<Sakenowa.BrandData>('/api/sakenowa/brands');
-
-      if (!data) return;
-
-      const brandNames = data.rows.map((brand) => brand.name);
-      setBrandList(brandNames);
-    }
-    setFetchedData();
-  }, []);
+  // React.useEffect(() => {
+  //   async function setFetchedData() {
+  //     const data = await fetchData<{rows: Database.Brand[]}>('/api/brands');
+  //     // const data = await fetchData<Sakenowa.BrandData>('/api/sakenowa/brands');
+  //
+  //     if (!data) return;
+  //
+  //     const brandNames = data.rows.map((brand) => brand.name);
+  //     setBrandList(brandNames);
+  //   }
+  //   setFetchedData();
+  // }, []);
 
   const handleBrandName: TextFieldProps['onValueChange'] = (value, event) => {
     if (typeof value === 'string') {
@@ -78,6 +82,12 @@ export function SakeEntry() {
             <li key={brand}>{brand}</li>
           ))}
         </ul>
+      </div>
+
+      <div className="space-y-4">
+        <BrandSelector />
+        <InputField label="造り" placeholder="例：純米大吟醸 雪室貯蔵三年"></InputField>
+
       </div>
     </div>
   );

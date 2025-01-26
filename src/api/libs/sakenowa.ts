@@ -1,4 +1,4 @@
-import { fetchData } from "../../utils/fetchData";
+import { getData } from "../../utils";
 import type { Sakenowa } from "../../types";
 
 export type SakenowaData = {
@@ -20,7 +20,7 @@ export namespace sakenowa {
       throw new Error("SAKENOWA_ENDPOINT is not defined in environment variables");
     }
 
-    const data = await fetchData<SakenowaData[T]>(`${SAKE_API_BASE}/${endpoint}`);
+    const data = await getData<SakenowaData[T]>(`${SAKE_API_BASE}/${endpoint}`);
     return data;
   }
 }

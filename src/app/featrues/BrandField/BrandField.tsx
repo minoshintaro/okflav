@@ -1,7 +1,7 @@
 import { Sakenowa } from '../../../types';
 import { useState, useEffect } from 'react'
 import { SAKENOWA_ENDPOINT } from '../../../constants';
-import { fetchData } from '../../../utils/fetchData';
+import { getData } from '../../../utils/fetchData';
 import { TextField, TextFieldProps } from '../../components/TextField'
 
 const cache: Sakenowa.Brand[] = [];
@@ -14,7 +14,7 @@ export function BrandField() {
     const fetchBrandData = async () => {
       if (cache.length === 0) {
         try {
-          const brandData = await fetchData<Sakenowa.BrandData>(`${SAKENOWA_ENDPOINT}/brands`);
+          const brandData = await getData<Sakenowa.BrandData>(`${SAKENOWA_ENDPOINT}/brands`);
           if (brandData) {
             cache.push(...brandData.brands);
           }

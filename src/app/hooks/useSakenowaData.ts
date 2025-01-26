@@ -1,6 +1,6 @@
 import type { Sakenowa } from '../../types';
 import { useState, useReducer, useEffect } from 'react';
-import { fetchData } from '../../utils/fetchData';
+import { getData } from '../../utils/fetchData';
 
 const SAKENOWA_ENDPOINT = 'https://muro.sakenowa.com/sakenowa-data/api';
 
@@ -25,12 +25,12 @@ interface State {
   error: string;
 }
 
-const areaData = await fetchData<Sakenowa.AreaData>(`${SAKENOWA_ENDPOINT}/areas`);
-const brandData = await fetchData<Sakenowa.BrandData>(`${SAKENOWA_ENDPOINT}/brands`);
-const breweryData = await fetchData<Sakenowa.BreweryData>(`${SAKENOWA_ENDPOINT}/breweries`);
-const flavorChartData = await fetchData<Sakenowa.FlavorChartData>(`${SAKENOWA_ENDPOINT}/flavor-charts`);
-const flavorTagData = await fetchData<Sakenowa.FlavorTagData>(`${SAKENOWA_ENDPOINT}/flavor-tags`);
-const brandFlavorTagData = await fetchData<Sakenowa.BrandFlavorTagData>(`${SAKENOWA_ENDPOINT}/brand-flavor-tags`);
+const areaData = await getData<Sakenowa.AreaData>(`${SAKENOWA_ENDPOINT}/areas`);
+const brandData = await getData<Sakenowa.BrandData>(`${SAKENOWA_ENDPOINT}/brands`);
+const breweryData = await getData<Sakenowa.BreweryData>(`${SAKENOWA_ENDPOINT}/breweries`);
+const flavorChartData = await getData<Sakenowa.FlavorChartData>(`${SAKENOWA_ENDPOINT}/flavor-charts`);
+const flavorTagData = await getData<Sakenowa.FlavorTagData>(`${SAKENOWA_ENDPOINT}/flavor-tags`);
+const brandFlavorTagData = await getData<Sakenowa.BrandFlavorTagData>(`${SAKENOWA_ENDPOINT}/brand-flavor-tags`);
 
 export function useSakenowaData(target: string) {
   const [data, setData] = useState({});
