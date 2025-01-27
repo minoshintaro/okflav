@@ -1,7 +1,13 @@
 import * as Headless from '@headlessui/react';
 
-export function Textarea() {
+type TextareaProps = {
+  placeholder?: string;
+};
+
+export function Textarea({ placeholder }: TextareaProps) {
   return (
-    <Headless.Textarea />
+    <Headless.Textarea
+      placeholder={placeholder}
+    />
   );
 }

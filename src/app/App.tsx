@@ -1,7 +1,8 @@
 // import * as React from 'react';
-import { PlusIcon } from '@heroicons/react/20/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
+import { Collection } from './featrues/Collection';
+import { Detail } from './featrues/Detail';
 import { Post } from './featrues/Post';
-import { CommentPost } from './featrues/CommentPost';
 import { CircleButton } from './components/CircleButton';
 import './App.css';
 
@@ -11,9 +12,12 @@ function App() {
       <header className="header">
         <h1 className="text-2xl font-mono">Okflav</h1>
       </header>
-      <main>
+      <main className="space-y-4">
+        <Collection />
+        <hr />
+        <Detail />
+        <hr />
         <Post />
-        <CommentPost />
       </main>
       <footer className="footMenu">
         <CircleButton>

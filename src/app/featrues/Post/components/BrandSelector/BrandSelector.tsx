@@ -16,7 +16,11 @@ function filterOptions<T extends { id: number; name: string }>(
   ));
 }
 
-export function BrandSelector() {
+type BrandSelectorProps = {
+  placeholder: string;
+};
+
+export function BrandSelector({ placeholder }: BrandSelectorProps) {
   const brandList = useAtomValue(sakenowaBrandListAtom);
 
   const [selected, setSelected] = React.useState<Sakenowa.Brand | null>(null);
@@ -38,7 +42,7 @@ export function BrandSelector() {
         value={selected}
         options={filteredOptions}
         query={query}
-        placeholder="銘柄（例：八海山）"
+        placeholder={placeholder}
         onValueChange={handleChange}
         onQueryChange={setQuery}
       />

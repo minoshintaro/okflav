@@ -1,1 +1,0 @@
-export { CommentPost } from './CommentPost';
