@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { PlusIcon } from '@heroicons/react/20/solid';
-import { SakeEntry } from './featrues/SakeEntry';
+import { Post } from './featrues/Post';
 import { CommentPost } from './featrues/CommentPost';
 import { CircleButton } from './components/CircleButton';
 import './App.css';
@@ -12,7 +12,7 @@ function App() {
         <h1 className="text-2xl font-mono">Okflav</h1>
       </header>
       <main>
-        <SakeEntry />
+        <Post />
         <CommentPost />
       </main>
       <footer className="footMenu">

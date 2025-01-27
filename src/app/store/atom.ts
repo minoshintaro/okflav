@@ -1,6 +1,15 @@
 import { atom } from 'jotai';
-import { getData, postData } from '../../utils/fetchData';
-import type { Database } from '../../types';
+import { getData } from '../../utils/fetchData';
+
+export const sakenowaBrandListAtom = atom<Promise<Sakenowa.Brand[]>>(async () => {
+  try {
+    const data = await getData<Sakenowa.BrandData>('/api/sakenowa/brands');
+    return data ? data.brands : [];
+  } catch (error) {
+    console.error('銘柄リストの取得に失敗:', error);
+    return [];
+  }
+});
 
 // 銘柄 ==================================================
 

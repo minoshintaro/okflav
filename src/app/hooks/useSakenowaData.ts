@@ -1,4 +1,3 @@
-import type { Sakenowa } from '../../types';
 import { useState, useReducer, useEffect } from 'react';
 import { getData } from '../../utils/fetchData';
 

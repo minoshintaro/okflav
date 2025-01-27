@@ -1,2 +1,4 @@
 export { getData, postData } from './fetchData';
-export { normalizeText } from './normalizeText'
+export { filterByQuery } from './filterByQuery';
+export { normalizeText } from './normalizeText';
+
