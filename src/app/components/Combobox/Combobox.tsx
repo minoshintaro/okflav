@@ -1,56 +1,59 @@
-import * as React from 'react';
+// import * as React from 'react';
 import * as Headless from '@headlessui/react';
-import { useDebouncedValue } from '../../hooks';
-import { normalizeText } from '../../../utils';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
   value: T | null;
   options: T[];
-  placeholder?: string;
-  onChange?: (value: T | null) => void;
+  query: string;
+  placeholder: string;
+  onValueChange: (value: T | null) => void;
+  onQueryChange: (query: string) => void;
 };
 
 export function Combobox<T extends { id: number; name: string }>({
   value,
   options,
-  placeholder = '',
-  onChange = () => {},
+  query,
+  placeholder,
+  onValueChange,
+  onQueryChange,
 }: ComboboxProps<T>) {
-  const [query, setQuery] = React.useState<string>('');
-  const debouncedQuery = useDebouncedValue(query, 500);
 
-  const filteredOptions = React.useMemo(() => {
-    return debouncedQuery ? options.filter(option => {
-      return normalizeText(option.name).includes(normalizeText(debouncedQuery));
-    }) : options;
-  }, [options, debouncedQuery]);
+  const handleDisplayValue = (option: T | null): string => {
+    if (option) return option.name;
+    if (query.length > 0) return query;
+    return '';
+  };
 
   return (
-    <Headless.Combobox value={value} onChange={onChange} onClose={() => setQuery('')}>
+    <Headless.Combobox value={value} onChange={onValueChange} onClose={() => onQueryChange('')}>
       <Headless.ComboboxInput
         placeholder={placeholder}
-        displayValue={(item: T | null) => item ? item.name : query}
-        onChange={(event) => setQuery(event.target.value)}
+        displayValue={handleDisplayValue}
+        onChange={(event) => onQueryChange(event.target.value)}
         className="rounded border border-gray-300 px-3 py-2 focus:ring-2 focus:ring-blue-500"
       />
       <Headless.ComboboxOptions
         anchor="bottom start"
         className="w-52 rounded border bg-white space-y-1 p-1 empty:invisible"
       >
-        {filteredOptions.length === 0 ? (
-          <Headless.ComboboxOption value={{ id: -1, name: query }} className="data-[focus]:bg-blue-100">
-            <span className="font-bold">"{query}"</span>
-          </Headless.ComboboxOption>
-        ) : (
-          filteredOptions.map((item) => (
+        {options.length > 0 ? (
+          options.map((option) => (
             <Headless.ComboboxOption
-              key={item.id}
-              value={item}
+              key={option.id}
+              value={option}
               className="p-1 cursor-pointer data-[focus]:bg-blue-100"
             >
-              {item.name}
+              {option.name}
             </Headless.ComboboxOption>
           ))
+        ) : (
+          <Headless.ComboboxOption
+            value={{ id: -1, name: query }}
+            className="data-[focus]:bg-blue-100"
+          >
+            <span className="font-bold">"{query}"</span>
+          </Headless.ComboboxOption>
         )}
       </Headless.ComboboxOptions>
     </Headless.Combobox>

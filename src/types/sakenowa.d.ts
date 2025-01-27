@@ -35,11 +35,11 @@ export namespace Sakenowa {
     brandId: Brand['id'];
     tagIds: FlavorTag['id'][];
   }
-
-  export type AreaData = { areas: Area[] };
-  export type BrandData = { brands: Brand[] };
-  export type BreweryData = { breweries: Brewery[] };
-  export type FlavorChartData = { flavorChart: FlavorChart[] };
-  export type FlavorTagData = { tags: FlavorTag[] };
-  export type BrandFlavorTagData = { flavorTags: BrandFlavorTag[] };
 }
+
+// export type AreaData = { areas: Area[] };
+// export type BrandData = { brands: Brand[] };
+// export type BreweryData = { breweries: Brewery[] };
+// export type FlavorChartData = { flavorChart: FlavorChart[] };
+// export type FlavorTagData = { tags: FlavorTag[] };
+// export type BrandFlavorTagData = { flavorTags: BrandFlavorTag[] };

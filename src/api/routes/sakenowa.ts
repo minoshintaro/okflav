@@ -1,60 +1,23 @@
-import { Hono } from 'hono';
-import { sakenowa } from '../libs';
+import { Hono, type Context } from 'hono';
+import { getData } from "../../utils";
 
+interface SakenowaData {
+  copyright: string;
+}
+
+const SAKE_API_BASE = process.env.SAKENOWA_ENDPOINT!;
 const app = new Hono();
 
-app.get('/areas', async(c) => {
-  try {
-    const data = await sakenowa.fetch('areas');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
+async function getDataAndRespond<T extends Record<string, any>>(c: Context, endpoint: string) {
+  const response = await getData<SakenowaData & T>(`${SAKE_API_BASE}/${endpoint}`);
+  return c.json(response);
+}
 
-app.get('/brands', async(c) => {
-  try {
-    const data = await sakenowa.fetch('brands');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
-
-app.get('/breweries', async(c) => {
-  try {
-    const data = await sakenowa.fetch('breweries');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
-
-app.get('/flavor-chart', async(c) => {
-  try {
-    const data = await sakenowa.fetch('flavor-chart');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
-
-app.get('/tags', async(c) => {
-  try {
-    const data = await sakenowa.fetch('tags');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
-
-app.get('/brand-flavor-tags', async(c) => {
-  try {
-    const data = await sakenowa.fetch('brand-flavor-tags');
-    return c.json(data);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
-  }
-});
+app.get('/areas', async(c: Context) => getDataAndRespond<{ areas: Sakenowa.Area[] }>(c, 'areas'));
+app.get('/brands', async(c: Context) => getDataAndRespond<{ brands: Sakenowa.Brand[] }>(c, 'brands'));
+app.get('/breweries', async(c: Context) => getDataAndRespond<{ breweries: Sakenowa.Brewery[] }>(c, 'breweries'));
+app.get('/flavor-chart', async(c: Context) => getDataAndRespond<{ flavorChart: Sakenowa.FlavorChart[] }>(c, 'flavor-chart'));
+app.get('/tags', async(c: Context) => getDataAndRespond<{ tags: Sakenowa.FlavorTag[] }>(c, 'tags'));
+app.get('/brand-flavor-tags', async(c: Context) => getDataAndRespond<{ flavorTags: Sakenowa.BrandFlavorTag[] }>(c, 'brand-flavor-tags'));
 
 export { app as sakenowa };

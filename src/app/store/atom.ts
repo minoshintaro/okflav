@@ -1,14 +1,9 @@
 import { atom } from 'jotai';
 import { getData } from '../../utils/fetchData';
 
-export const sakenowaBrandListAtom = atom<Promise<Sakenowa.Brand[]>>(async () => {
-  try {
-    const data = await getData<Sakenowa.BrandData>('/api/sakenowa/brands');
-    return data ? data.brands : [];
-  } catch (error) {
-    console.error('銘柄リストの取得に失敗:', error);
-    return [];
-  }
+export const sakenowaBrandListAtom = atom(async () => {
+  const data = await getData<{ copyright: string, brands: Sakenowa.Brand[] }>('/api/sakenowa/brands');
+  return data.brands;
 });
 
 // 銘柄 ==================================================

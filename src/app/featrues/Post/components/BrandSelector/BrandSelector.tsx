@@ -1,14 +1,32 @@
 import * as React from 'react';
 import { useAtomValue } from 'jotai';
+import { normalizeText } from '../../../../../utils';
 import { sakenowaBrandListAtom } from '../../../../store/atom';
+import { useDebouncedValue } from '../../../../hooks';
 import { Combobox } from '../../../../components/Combobox';
 
+function filterOptions<T extends { id: number; name: string }>(
+  options: T[],
+  query: string
+): T[] {
+  if (query === '') return options.slice(0, 100);
+
+  return options.filter(option => (
+    normalizeText(option.name).includes(normalizeText(query))
+  ));
+}
+
 export function BrandSelector() {
-  // Global states
   const brandList = useAtomValue(sakenowaBrandListAtom);
 
-  // Local states
   const [selected, setSelected] = React.useState<Sakenowa.Brand | null>(null);
+  const [query, setQuery] = React.useState<string>('');
+
+  const debouncedQuery = useDebouncedValue(query, 300);
+
+  const filteredOptions = React.useMemo(() => {
+    return filterOptions(brandList, debouncedQuery);
+  }, [brandList, debouncedQuery]);
 
   const handleChange = (value: Sakenowa.Brand | null) => {
     setSelected(value);
@@ -18,13 +36,12 @@ export function BrandSelector() {
     <>
       <Combobox
         value={selected}
-        options={brandList}
+        options={filteredOptions}
+        query={query}
         placeholder="銘柄（例：八海山）"
-        onChange={handleChange}
+        onValueChange={handleChange}
+        onQueryChange={setQuery}
       />
-      {brandList.map((brand) => (
-        <div key={brand.id}>{brand.name}</div>
-      ))}
     </>
   );
 }
