@@ -10,9 +10,9 @@ export function Post() {
       <h2>日本酒</h2>
       <BrandSelector placeholder="銘柄（例：八海山）" />
       <TextField placeholder="造り（例：純米大吟醸 雪室貯蔵三年）" />
-      <Textarea placeholder="どんな味わい？" />
+      <Textarea placeholder="どんな香り？どんな味わい？" />
       <TextField placeholder="署名" />
-      <Button />
+      <Button>投稿</Button>
     </div>
   );
 }

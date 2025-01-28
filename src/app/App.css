@@ -1,6 +1,6 @@
 .wrapper {
   margin-inline: auto;
-  width: calc(100% - 1rem);
+  width: calc(100% - 1rem * 2);
   max-width: 420px;
 }
 .header {
@@ -9,7 +9,7 @@
   padding: 0.5rem;
 }
 .footMenu {
-  position: absolute;
+  _position: absolute;
   inset: auto 0 0;
   display: grid;
   place-items: center;

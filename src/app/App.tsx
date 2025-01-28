@@ -10,9 +10,10 @@ function App() {
   return (
     <div className="wrapper">
       <header className="header">
-        <h1 className="text-2xl font-mono">Okflav</h1>
+        <h1 className="text-xl font-mono">Okflav</h1>
       </header>
       <main className="space-y-4">
+        <hr />
         <Collection />
         <hr />
         <Detail />
