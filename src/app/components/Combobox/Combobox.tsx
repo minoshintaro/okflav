@@ -31,7 +31,7 @@ export function Combobox<T extends { id: number; name: string }>({
         placeholder={placeholder}
         displayValue={handleDisplayValue}
         onChange={(event) => onQueryChange(event.target.value)}
-        className="rounded border border-gray-300 px-3 py-2 focus:ring-1 focus:ring-blue-500"
+        className="rounded-full bg-gray-100 border border-gray-100 px-4 py-2"
       />
       <Headless.ComboboxOptions
         anchor="bottom start"

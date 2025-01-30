@@ -1,4 +1,5 @@
 import { PencilIcon } from "@heroicons/react/24/solid";
+import { Color } from "../../components/Color"
 
 export function Detail() {
   return (
@@ -11,9 +12,11 @@ export function Detail() {
         <p className="absolute left-0 bottom-0 text-2xl">広島</p>
       </header>
 
-      <div className="mt-2 bg-gradient-to-t border-15 border-white from-[#fbc2eb] to-[#a6c1ee] aspect-square w-full rounded-full"></div>
+      <Color startColor="#ebbba7" endColor="#cfc7f8" />
 
-      <p className="text-xl/8 font-mincho">落ち着いた辛口の中に甘み。スッキリではなくしっかり（でもどっしりではない）、硬質だか角は丸い印象雑味はなく、全体を通じて味わいあり。何かに喩える対象はなく、素直に日本酒。後味にカラメル感。上の方にアルコール感がある。</p>
+      <div className="hidden mt-2 bg-gradient-to-t border-15 border-white from-[#fbc2eb] to-[#a6c1ee] aspect-square w-full rounded-full"></div>
+
+      <p className="text-xl/8 font-serif">落ち着いた辛口の中に甘み。スッキリではなくしっかり（でもどっしりではない）、硬質だか角は丸い印象雑味はなく、全体を通じて味わいあり。何かに喩える対象はなく、素直に日本酒。後味にカラメル感。上の方にアルコール感がある。</p>
 
       <footer className="flex gap-4 items-center justify-end">
         <p>minos</p>

@@ -13,7 +13,7 @@ export function TextField({ placeholder, onChange }: TextFieldProps) {
       type="text"
       placeholder={placeholder}
       onChange={onChange}
-      className="rounded border border-gray-300 px-3 py-2"
+      className="rounded-full bg-gray-100 border border-gray-100 px-4 py-2"
     />
   );
 }
