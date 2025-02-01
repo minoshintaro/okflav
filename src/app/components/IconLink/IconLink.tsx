@@ -2,6 +2,7 @@
 import { Link } from '@tanstack/react-router';
 import { Bars4Icon } from '@heroicons/react/24/solid';
 import { HeartIcon } from '@heroicons/react/24/solid';
+import { PencilIcon } from "@heroicons/react/24/solid";
 
 type IconLinkProps = {
   to: string;
@@ -10,10 +11,12 @@ type IconLinkProps = {
 
 export function IconLink({ to, icon }: IconLinkProps) {
   return (
-    <Link to={to} className="hover:text-amber-400 duration-200 transition-colors">
+    <Link to={to} className="hover:text-amber-600 duration-100 transition-colors">
       {(() => {
         switch (icon) {
-          case "bars":
+          case 'edit':
+            return <PencilIcon className="size-6" />;
+          case "lineup":
             return <Bars4Icon className="size-6 rotate-90 origin-center" />;
           case "heart":
             return <HeartIcon className="size-6" />;

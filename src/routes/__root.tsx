@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import { createRootRoute, Link, Outlet } from '@tanstack/react-router';
+import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { CircleButton } from '../app/components/CircleButton';
@@ -16,11 +16,9 @@ export const Route = createRootRoute({
           <Outlet />
         </main>
         <nav className="fixed inset-x-0 bottom-4 mx-auto w-14">
-          <Link to="/post">
-            <CircleButton>
-              <PlusIcon className="size-8" />
-            </CircleButton>
-          </Link>
+          <CircleButton to="/post">
+            <PlusIcon className="size-8" />
+          </CircleButton>
         </nav>
         <aside>
           <p className="text-xs text-gray-400">

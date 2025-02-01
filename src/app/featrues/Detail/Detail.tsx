@@ -1,28 +1,34 @@
-import { PencilIcon } from "@heroicons/react/24/solid";
-import { Color } from "../../components/Color"
+import { Color } from "../../components/Color";
+import { IconLink } from "../../components/IconLink";
 
-export function Detail() {
+type DetailProps = {
+  brandName: string;
+  productName: string;
+  area: string;
+  starColor: string;
+  endColor: string;
+  content: string;
+  userName: string;
+};
+
+export function Detail({ brandName, productName, area, starColor, endColor, content, userName }: DetailProps) {
   return (
     <div className="relative flex flex-col gap-y-4">
       <header className="absolute right-0 z-10 aspect-square w-full font-mincho [writing-mode:vertical-rl]">
         <div className="flex flex-col-reverse gap-2">
-          <h1 className="text-6xl">亀齢</h1>
-          <h2 className="mt-1 text-2xl">辛口純米</h2>
+          <h1 className="text-6xl">{brandName}</h1>
+          <h2 className="mt-1 text-2xl">{productName}</h2>
         </div>
-        <p className="absolute left-0 bottom-0 text-2xl">広島</p>
+        <p className="absolute left-0 bottom-0 text-2xl">{area}</p>
       </header>
 
-      <Color startColor="#ebbba7" endColor="#cfc7f8" />
-
-      <div className="hidden mt-2 bg-gradient-to-t border-15 border-white from-[#fbc2eb] to-[#a6c1ee] aspect-square w-full rounded-full"></div>
-
-      <p className="text-xl/8 font-serif">落ち着いた辛口の中に甘み。スッキリではなくしっかり（でもどっしりではない）、硬質だか角は丸い印象雑味はなく、全体を通じて味わいあり。何かに喩える対象はなく、素直に日本酒。後味にカラメル感。上の方にアルコール感がある。</p>
+      <Color startColor={starColor} endColor={endColor} />
+      <p className="text-xl/8 font-serif">{content}</p>
 
       <footer className="flex gap-4 items-center justify-end">
-        <p>minos</p>
-        <PencilIcon className="size-6" />
+        <p>{userName}</p>
+        <IconLink to="/edit" icon="edit" />
       </footer>
-
     </div>
   );
 }
