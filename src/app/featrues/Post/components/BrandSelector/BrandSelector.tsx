@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useAtomValue } from 'jotai';
 import { normalizeText } from '../../../../../utils';
-import { sakenowaBrandListAtom } from '../../../../store/atom';
+import { sakenowaBrandListAtom } from '../../../../../store/atom';
 import { useDebouncedValue } from '../../../../hooks';
 import { Combobox } from '../../../../components/Combobox';
 

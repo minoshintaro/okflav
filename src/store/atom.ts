@@ -1,10 +1,30 @@
 import { atom } from 'jotai';
-import { getData } from '../../utils/fetchData';
+import { atomFamily } from 'jotai/utils';
+import { getData } from '../utils/fetchData';
+import { sampleData } from './sample';
+
+export const lineupAtom = atom<Promise<Sample.Product[]>>(async () => {
+  return getData<Sample.Product[]>('/api/sample/products');
+});
+
+export const collectionAtom = atomFamily((key: string) => atom(async (get) => {
+  return getData<Sample.Product[]>(`/api/sample/${key}`);
+}));
+
+export const selectedPostAtom = atom<string>('latest');
+export const postDataAtom = atom((get) => {
+  const category = get(selectedPostAtom);
+  return (sampleData.post)[category] || [];
+});
+
+
+// さけのわ ==================================================
 
 export const sakenowaBrandListAtom = atom(async () => {
   const data = await getData<{ copyright: string, brands: Sakenowa.Brand[] }>('/api/sakenowa/brands');
   return data.brands;
 });
+
 
 // 銘柄 ==================================================
 

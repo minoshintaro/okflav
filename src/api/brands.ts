@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { turso } from '../libs';
+import { turso } from './libs';
 
 const app = new Hono();
 

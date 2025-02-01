@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import { Collection } from './featrues/Collection';
+import { Collection } from './featrues/Lineup';
 import { Detail } from './featrues/Detail';
 import { Post } from './featrues/Post';
 import { CircleButton } from './components/CircleButton';

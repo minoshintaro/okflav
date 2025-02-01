@@ -1,5 +1,5 @@
 import { Hono, type Context } from 'hono';
-import { getData } from "../../utils";
+import { getData } from "../utils";
 
 interface SakenowaData {
   copyright: string;
