@@ -4,7 +4,7 @@ import { IconLink } from '../../components/IconLink';
 
 export function Header() {
   return (
-    <div className="flex justify-between items-center gap-2 py-2">
+    <div className="flex justify-between items-center gap-2 py-2 px-2">
       <div>
         <IconLink to="/" icon="lineup" />
       </div>
@@ -12,7 +12,7 @@ export function Header() {
         <h1 className="text-lg font-mono">Okflav</h1>
       </Link>
       <div>
-        <IconLink to="/collection/posts" icon="heart" />
+        <IconLink to="/collection/posts" icon="post" />
       </div>
     </div>
   );

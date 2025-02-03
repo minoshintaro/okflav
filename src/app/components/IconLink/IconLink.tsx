@@ -1,5 +1,6 @@
 // import * as React from 'react';
 import { Link } from '@tanstack/react-router';
+import { ChatBubbleOvalLeftIcon } from '@heroicons/react/24/solid';
 import { Bars4Icon } from '@heroicons/react/24/solid';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { PencilIcon } from "@heroicons/react/24/solid";
@@ -16,10 +17,12 @@ export function IconLink({ to, icon }: IconLinkProps) {
         switch (icon) {
           case 'edit':
             return <PencilIcon className="size-6" />;
-          case "lineup":
+          case 'lineup':
             return <Bars4Icon className="size-6 rotate-90 origin-center" />;
-          case "heart":
+          case 'heart':
             return <HeartIcon className="size-6" />;
+          case 'post':
+            return <ChatBubbleOvalLeftIcon className="size-6" />;
           default:
             return <Bars4Icon className="size-6" />;
         }

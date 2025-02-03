@@ -12,8 +12,9 @@ const app = new Hono();
 // 3 created_at DATETIME
 
 const productSchema = z.object({
+  brand_id: z.number(),
   name: z.string().min(1, '名前は必須です').max(50, '名前は50文字以内です'),
-  brand_id: z.number().int().positive('brand_idは正の整数である必要があります'),
+  // brand_id: z.number().int().positive('brand_idは正の整数である必要があります'),
 });
 
 app.get('/', async(c) => {
