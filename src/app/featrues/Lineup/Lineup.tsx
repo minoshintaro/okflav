@@ -11,7 +11,7 @@ export function Lineup() {
       <div className="flex justify-center">
         <SearchField placeholder="銘柄" />
       </div>
-      <div className="flex flex-row-reverse justify-center gap-4">
+      <div className="flex flex-row-reverse flex-wrap justify-start gap-x-4 gap-y-8 mx-auto size-fit">
         {products.map((product) => (
           <a href="#" key={product.id} className="flex flex-row font-mincho items-center [writing-mode:vertical-rl]">
             <p className="text-4xl">{product.brandName}</p>

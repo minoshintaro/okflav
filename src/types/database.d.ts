@@ -7,7 +7,11 @@ export namespace Database {
     name: string;
   }
 
-
+  // →  .schema areas
+  // CREATE TABLE areas (
+  // id integer primary key,
+  // name text not null
+  // );
 
   export interface Area {
     id?: number;

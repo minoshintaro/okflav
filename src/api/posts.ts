@@ -26,22 +26,22 @@ app.get('/', async (c) => {
   const from = Number(c.req.query('from')) || 0;
   const to = Number(c.req.query('to')) || from + 50;
   const query = `
-    SELECT
-      p.id,
-      p.brand_id,
-      p.product_id,
-      p.user_id,
-      p.content,
-      p.created_at,
-      users.name AS user_name,
-      brands.name AS brand_name,
-      products.name AS product_name
-    FROM posts p
-    JOIN users ON p.user_id = users.id
-    JOIN brands ON p.brand_id = brands.id
-    JOIN products ON p.product_id = products.id
-    ORDER BY p.created_at DESC
-    LIMIT ${to - from} OFFSET ${from}
+    select
+      posts.id,
+      posts.brand_id,
+      posts.product_id,
+      posts.user_id,
+      posts.content,
+      posts.created_at,
+      users.name as user_name,
+      brands.name as brand_name,
+      products.name as product_name
+    from posts
+    join users on posts.user_id = users.id
+    join brands on posts.brand_id = brands.id
+    join products on posts.product_id = products.id
+    order by posts.created_at desc
+    limit ${to - from} offset ${from}
   `;
   const { rows } = await turso.execute(query);
   return c.json(rows);
@@ -49,17 +49,18 @@ app.get('/', async (c) => {
 
 app.get('/lineup', async (c) => {
   const query = `
-    SELECT
-      p.brand_id,
-      p.product_id,
-      p.created_at,
-      brands.name AS brand_name,
-      products.name AS product_name
-    FROM posts p
-    JOIN brands ON p.brand_id = brands.id
-    JOIN products ON p.product_id = products.id
-    ORDER BY p.created_at DESC
+    select
+      posts.brand_id,
+      posts.product_id,
+      posts.created_at,
+      brands.name as brand_name,
+      products.name as product_name
+    from posts
+    join brands on posts.brand_id = brands.id
+    join products on posts.product_id = products.id
+    order by posts.created_at desc
   `;
+
   const { rows } = await turso.execute(query);
   return c.json(rows);
 });
@@ -70,21 +71,31 @@ app.post('/', zValidator('json', postSchema), async (c) => {
   try {
     // 投稿を挿入
     await turso.execute({
-      sql: `INSERT INTO posts (brand_id, product_id, user_id, content, created_at)
-            VALUES (?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+      sql: `
+        insert into posts (brand_id, product_id, user_id, content, created_at)
+        values (?, ?, ?, ?, current_timestamp)
+      `,
       args: [brand_id, product_id, user_id, content],
     });
 
     // 挿入したデータを取得
     const result = await turso.execute({
       sql: `
-        SELECT p.id, p.brand_id, p.product_id, p.user_id, p.content, p.created_at,
-          users.name AS user_name, brands.name AS brand_name, products.name AS product_name
-        FROM posts p
-        JOIN users ON p.user_id = users.id
-        JOIN brands ON p.brand_id = brands.id
-        JOIN products ON p.product_id = products.id
-        WHERE p.id = last_insert_rowid();
+        select
+          posts.id,
+          posts.brand_id,
+          posts.product_id,
+          posts.user_id,
+          posts.content,
+          posts.created_at,
+          users.name as user_name,
+          brands.name as brand_name,
+          products.name as product_name
+        from posts
+        join users on posts.user_id = users.id
+        join brands on posts.brand_id = brands.id
+        join products on posts.product_id = products.id
+        where posts.id = last_insert_rowid()
       `,
       args: [],
     });
