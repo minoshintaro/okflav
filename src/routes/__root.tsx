@@ -11,7 +11,7 @@ export const Route = createRootRoute({
       <header className="sticky top-0 z-10">
         <Header />
       </header>
-      <main className="px-6">
+      <main className="mx-auto max-w-[640px] px-6">
         <Outlet />
       </main>
       <nav className="fixed inset-x-0 bottom-4 mx-auto w-14">
@@ -19,7 +19,7 @@ export const Route = createRootRoute({
           <PlusIcon className="size-8" />
         </CircleButton>
       </nav>
-      <aside>
+      <aside hidden>
         <p className="text-xs text-gray-400">
           ※「<a href="https://sakenowa.com" target="_blank">さけのわデータ</a>」を利用しています
         </p>

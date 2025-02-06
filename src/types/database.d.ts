@@ -1,5 +1,6 @@
 // % turso auth login
 // % turso db list
+// % turso db shell database_name
 
 export namespace Database {
   export interface User {

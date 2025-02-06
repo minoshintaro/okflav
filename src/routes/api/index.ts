@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { posts } from '../../api/posts';
 import { brands, products, sakenowa, sample } from '../../api';
 
 const app = new Hono().basePath('/api');
@@ -14,6 +15,8 @@ app.get('/', (c) => {
 });
 
 // ルーティング
+app.route('/areas', posts);
+app.route('/posts', posts);
 app.route('/brands', brands);
 app.route('/products', products);
 app.route('/sakenowa', sakenowa);

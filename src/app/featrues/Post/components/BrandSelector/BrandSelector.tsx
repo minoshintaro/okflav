@@ -18,14 +18,14 @@ function filterOptions<T extends { id: number; name: string }>(
 
 type BrandSelectorProps = {
   placeholder: string;
+  value?: Sakenowa.Brand | null;
+  onChange?: (value: Sakenowa.Brand | null) => void;
 };
 
-export function BrandSelector({ placeholder }: BrandSelectorProps) {
+export function BrandSelector({ placeholder, value, onChange }: BrandSelectorProps) {
   const brandList = useAtomValue(sakenowaBrandListAtom);
 
-  const [selected, setSelected] = React.useState<Sakenowa.Brand | null>(null);
   const [query, setQuery] = React.useState<string>('');
-
   const debouncedQuery = useDebouncedValue(query, 300);
 
   const filteredOptions = React.useMemo(() => {
@@ -33,13 +33,15 @@ export function BrandSelector({ placeholder }: BrandSelectorProps) {
   }, [brandList, debouncedQuery]);
 
   const handleChange = (value: Sakenowa.Brand | null) => {
-    setSelected(value);
+    if (onChange) {
+      onChange(value);
+    }
   };
 
   return (
     <>
       <Combobox
-        value={selected}
+        value={value}
         options={filteredOptions}
         query={query}
         placeholder={placeholder}
