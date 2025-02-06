@@ -8,7 +8,7 @@ export function Header() {
       <div>
         <IconLink to="/" icon="lineup" />
       </div>
-      <Link to="/">
+      <Link to="/form">
         <h1 className="text-lg font-mono">Okflav</h1>
       </Link>
       <div>

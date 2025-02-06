@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { turso } from './libs';
+import { turso, addRecord } from './libs/turso';
 
 const app = new Hono();
 
@@ -30,10 +30,7 @@ app.post('/', zValidator('json', brandSchema), async (c) => {
   const { area_id, name, furigana } = c.req.valid('json');
 
   try {
-    const result = await turso.execute({
-      sql: 'INSERT INTO brands (area_id, name, furigana) VALUES (?, ?, ?) RETURNING *',
-      args: [area_id, name, furigana || null],
-    });
+    const result = await addRecord('brands', ['area_id', 'name', 'furigana'], [area_id, name, furigana || null]);
     return c.json({ message: '銘柄が追加されました', data: result.rows[0] });
   } catch (error) {
     if (error instanceof Error) {

@@ -1,5 +1,5 @@
 import { Hono } from 'hono';
-import { turso } from './libs';
+import { turso } from './libs/turso';
 
 const app = new Hono();
 
