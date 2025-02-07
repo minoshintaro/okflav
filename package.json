@@ -4,9 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "run-p dev:api dev:site",
+    "dev": "run-p dev:api dev:app",
     "dev:api": "cross-env $(cat .env.local | xargs) tsx watch src/routes/api/index.ts",
-    "dev:site": "vite",
+    "dev:app": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"

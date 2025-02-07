@@ -1,28 +1,6 @@
 import { serve } from '@hono/node-server';
-import { Hono } from 'hono';
-import { cors } from 'hono/cors';
-import { posts } from '../../api/posts';
-import { brands, products, sakenowa, sample } from '../../api';
+import app from '../../api';
 
-const app = new Hono().basePath('/api');
-
-// CORS設定（フロントエンド用）
-app.use('*', cors());
-
-app.get('/', (c) => {
-  const message = 'Hello, world!';
-  return c.text(`${message}`);
-});
-
-// ルーティング
-app.route('/areas', posts);
-app.route('/posts', posts);
-app.route('/brands', brands);
-app.route('/products', products);
-app.route('/sakenowa', sakenowa);
-app.route('/sample', sample);
-
-// 開発サーバー
 const server = serve({
   fetch: app.fetch,
   port: 3000,
@@ -31,8 +9,7 @@ const server = serve({
 });
 
 process.on('SIGINT', () => {
-  server.close((err?: Error) => {
-    console.log(err ? 'サーバー停止中にエラーが発生しました' : 'サーバーが停止しました');
-    process.exit(0);
-  });
+  console.log("Shutting down the server...");
+  server.close?.(); // `close()` が存在する場合のみ実行
+  process.exit(0);
 });
