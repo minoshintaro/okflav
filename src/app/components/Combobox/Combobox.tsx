@@ -2,40 +2,40 @@
 import * as Headless from '@headlessui/react';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
+  placeholder: string;
   value: T | null;
   options: T[];
   query: string;
-  placeholder: string;
   onValueChange: (value: T | null) => void;
   onQueryChange: (query: string) => void;
 };
 
 export function Combobox<T extends { id: number; name: string }>({
+  placeholder,
   value,
   options,
   query,
-  placeholder,
   onValueChange,
   onQueryChange,
 }: ComboboxProps<T>) {
-
-  const handleDisplayValue = (option: T | null): string => {
-    if (option) return option.name;
-    if (query.length > 0) return query;
-    return '';
-  };
-
   return (
-    <Headless.Combobox value={value} onChange={onValueChange} onClose={() => onQueryChange('')}>
+    <Headless.Combobox
+      value={value}
+      onChange={(option) => {
+        onValueChange(option);
+        onQueryChange(option?.name || '');
+      }}
+    >
       <Headless.ComboboxInput
         placeholder={placeholder}
-        displayValue={handleDisplayValue}
+        displayValue={(option: T | null) => option?.name || ''}
         onChange={(event) => onQueryChange(event.target.value)}
         className="rounded-full bg-gray-100 border border-gray-100 px-4 py-2"
       />
       <Headless.ComboboxOptions
         anchor="bottom start"
-        className="w-52 rounded border bg-white space-y-1 p-1 empty:invisible"
+        className="w-52 rounded border bg-white space-y-1 p-1"
+        hidden={options.length === 0}
       >
         {options.length > 0 ? (
           options.map((option) => (
@@ -49,8 +49,8 @@ export function Combobox<T extends { id: number; name: string }>({
           ))
         ) : (
           <Headless.ComboboxOption
-            value={{ id: -1, name: query }}
-            className="data-[focus]:bg-blue-100"
+            value={null}
+            className="p-1 cursor-pointer data-[focus]:bg-blue-100"
           >
             <span className="font-bold">"{query}"</span>
           </Headless.ComboboxOption>

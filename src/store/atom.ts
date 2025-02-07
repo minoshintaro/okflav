@@ -25,6 +25,11 @@ export const sakenowaBrandListAtom = atom(async () => {
   return data.brands;
 });
 
+export const sakenowaAreaAtom = atom(async () => {
+  const data = await getData<{ copyright: string, areas: Sakenowa.Area[] }>('/api/sakenowa/areas');
+  return data.areas;
+});
+
 
 // 銘柄 ==================================================
 

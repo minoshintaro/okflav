@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Button } from "../../components/Button";
 import { TextField } from "../../components/TextField";
 import { Textarea } from "../../components/Textarea";
-import { BrandSelector } from './components/BrandSelector';
+import { BrandSelector } from '../BrandSelector';
 
 export function Post() {
   const [brand, setBrand] = React.useState("");
@@ -22,7 +22,7 @@ export function Post() {
     // APIのpostSchemaに合わせたペイロードを生成
     const payload = {
       user: { name: signature },
-      brand: { name: brand, area_id: 1 }, // area_id は適切な値にするか、別途選択可能にする
+      brand_id: { name: brand, area_id: 1 }, // area_id は適切な値にするか、別途選択可能にする
       product: { name: product },
       message: message,
     };
@@ -57,22 +57,22 @@ export function Post() {
         <BrandSelector
           placeholder="銘柄（例：八海山）"
           value={brand}
-          onChange={(value: string) => setBrand(value)}
+          onChange={setBrand}
         />
         <TextField
           placeholder="造り（例：純米大吟醸 雪室貯蔵三年）"
           value={product}
-          onChange={(e) => setProduct(e.target.value)}
+          onChange={setProduct}
         />
         <Textarea
           placeholder="どんな香り？どんな味わい？"
           value={message}
-          onChange={(e) => setMessage(e.target.value)}
+          onChange={setMessage}
         />
         <TextField
           placeholder="署名"
           value={signature}
-          onChange={(e) => setSignature(e.target.value)}
+          onChange={setSignature}
         />
         <Button type="submit" disabled={loading}>
           {loading ? "送信中..." : "投稿"}

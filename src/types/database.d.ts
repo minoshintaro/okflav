@@ -1,8 +1,13 @@
 // % turso auth login
 // % turso db list
-// % turso db shell database_name
+// % turso db shell okflav
 
 export namespace Database {
+  // →  .schema users
+  // CREATE TABLE users (
+  // id INTEGER primary key autoincrement,
+  // name TEXT not null
+  // );
   export interface User {
     id?: number;
     name: string;
@@ -33,12 +38,13 @@ export namespace Database {
     area_id?: number;
   }
 
-  // → .schema products
+  // →  .schema products
   // CREATE TABLE products (
-  // id INTEGER PRIMARY KEY AUTOINCREMENT,
-  // brand_id INTEGER NOT NULL,
-  // name TEXT NOT NULL,
-  // created_at TEXT DEFAULT CURRENT_TIMESTAMP
+  // id INTEGER primary key autoincrement,
+  // brand_id INTEGER not null,
+  // name TEXT not null,
+  // created_at DATETIME default current_timestamp,
+  // foreign key (brand_id) references brands(id)
   // );
   export interface Product {
     id?: number;
@@ -46,6 +52,18 @@ export namespace Database {
     name: string;
     created_at?: string;
   }
+
+  // →  .schema posts
+  // CREATE TABLE posts (
+  // id INTEGER primary key autoincrement,
+  // product_id INTEGER not null,
+  // user_id INTEGER not null,
+  // message TEXT not null,
+  // created_at DATETIME default current_timestamp,
+  // updated_at DATETIME default current_timestamp,
+  // foreign key (product_id) references products(id),
+  // foreign key (user_id) references users(id)
+  // );
   export interface Post {
     id?: number;
     brand_id: number;
@@ -54,6 +72,7 @@ export namespace Database {
     content: string;
     created_at?: string;
   }
+
   export interface FlavorColor {
     id?: number;
     post_id: number;

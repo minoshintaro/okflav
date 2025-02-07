@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { useAtomValue } from 'jotai';
-import { normalizeText } from '../../../../../utils';
-import { sakenowaBrandListAtom } from '../../../../../store/atom';
-import { useDebouncedValue } from '../../../../hooks';
-import { Combobox } from '../../../../components/Combobox';
+import { normalizeText } from '../../../utils';
+import { sakenowaBrandListAtom } from '../../../store/atom';
+import { useDebouncedValue } from '../../hooks';
+import { Combobox } from '../../components/Combobox';
 
 function filterOptions<T extends { id: number; name: string }>(
   options: T[],
@@ -18,8 +18,8 @@ function filterOptions<T extends { id: number; name: string }>(
 
 type BrandSelectorProps = {
   placeholder: string;
-  value?: Sakenowa.Brand | null;
-  onChange?: (value: Sakenowa.Brand | null) => void;
+  value: Sakenowa.Brand | null;
+  onChange: (value: Sakenowa.Brand | null) => void;
 };
 
 export function BrandSelector({ placeholder, value, onChange }: BrandSelectorProps) {
@@ -32,20 +32,14 @@ export function BrandSelector({ placeholder, value, onChange }: BrandSelectorPro
     return filterOptions(brandList, debouncedQuery);
   }, [brandList, debouncedQuery]);
 
-  const handleChange = (value: Sakenowa.Brand | null) => {
-    if (onChange) {
-      onChange(value);
-    }
-  };
-
   return (
     <>
       <Combobox
+        placeholder={placeholder}
         value={value}
         options={filteredOptions}
         query={query}
-        placeholder={placeholder}
-        onValueChange={handleChange}
+        onValueChange={onChange}
         onQueryChange={setQuery}
       />
     </>
