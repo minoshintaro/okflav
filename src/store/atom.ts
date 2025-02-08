@@ -18,18 +18,6 @@ export const postDataAtom = atom((get) => {
 });
 
 
-// さけのわ ==================================================
-
-export const sakenowaBrandListAtom = atom(async () => {
-  const data = await getData<{ copyright: string, brands: Sakenowa.Brand[] }>('/api/sakenowa/brands');
-  return data.brands;
-});
-
-export const sakenowaAreaAtom = atom(async () => {
-  const data = await getData<{ copyright: string, areas: Sakenowa.Area[] }>('/api/sakenowa/areas');
-  return data.areas;
-});
-
 
 // 銘柄 ==================================================
 

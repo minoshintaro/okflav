@@ -4,12 +4,12 @@ import * as Headless from '@headlessui/react';
 type TextareaProps = {
   placeholder?: string;
   value?: string;
-  onChange?: (input: string) => void;
+  onValueChange?: (input: string) => void;
 };
 
-export function Textarea({ placeholder = '', value = '', onChange }: TextareaProps) {
+export function Textarea({ placeholder = '', value = '', onValueChange }: TextareaProps) {
   const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onChange?.(event.target.value);
+    onValueChange?.(event.target.value);
   };
 
   return (

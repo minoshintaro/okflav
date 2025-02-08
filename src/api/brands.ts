@@ -18,8 +18,11 @@ const brandSchema = z.object({
 });
 
 app.get('/', async(c) => {
+  const name = c.req.query('name');
+  const sql = name ? 'SELECT * FROM brands WHERE name = ?' : 'SELECT * FROM brands';
+  const args = name ? [name] : [];
   try {
-    const { rows } = await turso.execute('SELECT * FROM brands');
+    const { rows } = await turso.execute({ sql, args });
     return c.json({ rows });
   } catch (error) {
     return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);

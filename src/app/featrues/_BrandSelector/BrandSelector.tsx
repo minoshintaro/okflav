@@ -19,10 +19,10 @@ function filterOptions<T extends { id: number; name: string }>(
 type BrandSelectorProps = {
   placeholder: string;
   value: Sakenowa.Brand | null;
-  onChange: (value: Sakenowa.Brand | null) => void;
+  onDataChange: (value: Sakenowa.Brand | null) => void;
 };
 
-export function BrandSelector({ placeholder, value, onChange }: BrandSelectorProps) {
+export function BrandSelector({ placeholder, value, onDataChange }: BrandSelectorProps) {
   const brandList = useAtomValue(sakenowaBrandListAtom);
 
   const [query, setQuery] = React.useState<string>('');
@@ -36,10 +36,10 @@ export function BrandSelector({ placeholder, value, onChange }: BrandSelectorPro
     <>
       <Combobox
         placeholder={placeholder}
-        value={value}
+        value={value ? value.name : ''}
         options={filteredOptions}
         query={query}
-        onValueChange={onChange}
+        onValueChange={onDataChange}
         onQueryChange={setQuery}
       />
     </>

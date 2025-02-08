@@ -1,4 +1,4 @@
-export namespace Sakenowa {
+namespace Sakenowa {
   export interface Area {
     id: number;
     name: string;
@@ -36,10 +36,3 @@ export namespace Sakenowa {
     tagIds: FlavorTag['id'][];
   }
 }
-
-// export type AreaData = { areas: Area[] };
-// export type BrandData = { brands: Brand[] };
-// export type BreweryData = { breweries: Brewery[] };
-// export type FlavorChartData = { flavorChart: FlavorChart[] };
-// export type FlavorTagData = { tags: FlavorTag[] };
-// export type BrandFlavorTagData = { flavorTags: BrandFlavorTag[] };

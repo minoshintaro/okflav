@@ -4,12 +4,12 @@ import * as Headless from '@headlessui/react';
 type TextFieldProps = {
   placeholder?: string;
   value?: string;
-  onChange?: (input: string) => void;
+  onValueChange?: (input: string) => void;
 };
 
-export function TextField({ placeholder = '', value = '', onChange }: TextFieldProps) {
+export function TextField({ placeholder = '', value = '', onValueChange }: TextFieldProps) {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onChange?.(event.target.value);
+    onValueChange?.(event.target.value);
   };
 
   return (

@@ -2,7 +2,7 @@
 // % turso db list
 // % turso db shell okflav
 
-export namespace Database {
+namespace Database {
   // →  .schema users
   // CREATE TABLE users (
   // id INTEGER primary key autoincrement,
