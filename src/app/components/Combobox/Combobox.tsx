@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Headless from '@headlessui/react';
+import { filterList } from './utils';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
   placeholder: string;
@@ -15,35 +16,21 @@ export function Combobox<T extends { id: number; name: string }>({
   onCurrentChange,
 }: ComboboxProps<T>) {
   const [query, setQuery] = React.useState('');
+  const filteredList = filterList<T>(list, query);
 
-  const filteredList = React.useMemo(() => {
-    return query === ''
-      ? list.slice(0, 100)
-      : list.filter(item => item.name.includes(query));
-  }, [list, query]);
-
-  const handleCurrentChange = (item: T | null) => {
-    onCurrentChange(item);
-    setQuery(item?.name ?? '');
-  };
-
-  const handleClose = () => {
-    if (query.length > 0) {
-      const matchedItem = list.find(
-        item => item.name.toLowerCase() === query.toLowerCase()
-      );
-      if (matchedItem) {
-        onCurrentChange(matchedItem);
-      } else {
-        const newItem = { id: -1, name: query } as T;
-        onCurrentChange(newItem);
-      }
-    }
-    setQuery('');
-  }
+  // Event handlers ==========================================
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(event.target.value);
+  };
+
+  const handleCurrentChange = (item: T | null) => {
+    onCurrentChange(item);
+    // setQuery(item?.name ?? '');
+  };
+
+  const handleClose = () => {
+    setQuery('');
   };
 
   return (

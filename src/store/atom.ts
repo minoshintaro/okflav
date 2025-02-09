@@ -3,7 +3,19 @@ import { atomFamily } from 'jotai/utils';
 import { getData } from '../utils/fetchData';
 import { sampleData } from './sample';
 
+export const selectedBrandAtom = atom<Database.BrandData | null>(null);
+export const selectedProductAtom = atom<Database.ProductData | null>(null);
 export const userAtom = atom<Database.UserData | null>(null);
+
+
+
+
+
+
+
+
+
+
 
 
 export const lineupAtom = atom<Promise<Sample.Product[]>>(async () => {

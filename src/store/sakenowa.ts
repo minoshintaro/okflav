@@ -1,7 +1,7 @@
 import { atom } from "jotai";
 import { getData } from "../utils/fetchData";
 
-export type SakenowaAtom = {
+export type SakenowaData = {
   areas: Sakenowa.Area[];
   breweries: Sakenowa.Brewery[];
   brands: Sakenowa.Brand[];
@@ -18,7 +18,5 @@ export const sakenowaDataAtom = atom(async () => {
     areas: areasData.areas,
     breweries: breweriesData.breweries,
     brands: brandsData.brands,
-  } as SakenowaAtom;
+  } as SakenowaData;
 });
-
-export const sakenowaBrandAtom = atom<Sakenowa.Brand | null>(null);

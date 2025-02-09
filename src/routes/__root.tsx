@@ -19,11 +19,6 @@ export const Route = createRootRoute({
           <PlusIcon className="size-8" />
         </CircleButton>
       </nav>
-      <aside hidden>
-        <p className="text-xs text-gray-400">
-          ※「<a href="https://sakenowa.com" target="_blank">さけのわデータ</a>」を利用しています
-        </p>
-      </aside>
       <TanStackRouterDevtools />
     </>
   ),
