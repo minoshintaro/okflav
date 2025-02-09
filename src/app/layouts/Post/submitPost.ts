@@ -1,9 +1,9 @@
 import { postData } from '../../../utils';
 
 type SubmitPost = {
-  selectedBrand?: Turso.BrandData;
-  selectedProduct?: Turso.ProductData;
-  user?: Turso.UserData;
+  selectedBrand: Turso.BrandData | null;
+  selectedProduct: Turso.ProductData | null;
+  activeUser: Turso.UserData | null;
   brand: Sakenowa.Brand;
   area: Sakenowa.Area;
   product: Turso.ProductData;
@@ -14,7 +14,7 @@ type SubmitPost = {
 export async function submitPost({
   selectedBrand,
   selectedProduct,
-  user,
+  activeUser,
   brand,
   area,
   product,
@@ -24,13 +24,13 @@ export async function submitPost({
   try {
     const brand_id = selectedBrand?.id ?? await postData(
       '/api/brands',
-      { area_id: area.id, name: brand.name, furigana: '' }
+      { area_id: area.id, name: brand.name }
     );
     const product_id = selectedProduct?.id ?? await postData(
       '/api/products',
       { brand_id, name: product.name }
     );
-    const user_id = user?.id ?? await postData(
+    const user_id = activeUser?.id ?? await postData(
       '/api/users',
       { name: signature }
     );

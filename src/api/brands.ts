@@ -9,12 +9,10 @@ const app = new Hono();
 // 0 id INTEGER
 // 1 area_id INTEGER NOT NULL
 // 2 name TEXT NOT NULL
-// 3 furigana TEXT
 
 const brandSchema = z.object({
   area_id: z.coerce.number(),
   name: z.string().min(1, '名前は必須です'),
-  furigana: z.string().optional(),
 });
 
 app.get('/', async(c) => {
@@ -30,10 +28,10 @@ app.get('/', async(c) => {
 });
 
 app.post('/', zValidator('json', brandSchema), async (c) => {
-  const { area_id, name, furigana } = c.req.valid('json');
+  const { area_id, name } = c.req.valid('json');
 
   try {
-    const result = await addRecord('brands', ['area_id', 'name', 'furigana'], [area_id, name, furigana || null]);
+    const result = await addRecord('brands', ['area_id', 'name'], [area_id, name || null]);
     return c.json({ message: '銘柄が追加されました', data: result.rows[0] });
   } catch (error) {
     if (error instanceof Error) {

@@ -1,56 +1,34 @@
+// Turso ========================================
 
 interface User {
   name: string;
 }
 interface Area {
+  id: number;
   name: string;
 }
 interface Brand {
   name: string;
-  furigana?: string;
   area_id?: number;
 }
 interface Product {
-  brand_id: number;
   name: string;
+  brand_id: number;
 }
 interface Post {
+  message: string;
   product_id: number;
   user_id: number;
-  message: string;
 }
 declare namespace Turso {
-  // id INTEGER primary key autoincrement,
-  // name TEXT not null
   type UserData = User & { id: number };
-
-  // id integer primary key,
-  // name text not null
-  type AreaData = Area & { id: number };
-
-  // id INTEGER PRIMARY KEY AUTOINCREMENT,
-  // name TEXT NOT NULL UNIQUE,
-  // furigana TEXT,
-  // area_id INTEGER
+  type AreaData = Area;
   type BrandData = Brand & { id: number };
-
-  // id INTEGER primary key autoincrement,
-  // brand_id INTEGER not null,
-  // name TEXT not null,
-  // created_at DATETIME default current_timestamp,
-  // foreign key (brand_id) references brands(id)
   type ProductData = Product & { id: number; created_at: string; };
-
-  // id INTEGER primary key autoincrement,
-  // product_id INTEGER not null,
-  // user_id INTEGER not null,
-  // message TEXT not null,
-  // created_at DATETIME default current_timestamp,
-  // updated_at DATETIME default current_timestamp,
-  // foreign key (product_id) references products(id),
-  // foreign key (user_id) references users(id)
   type PostData = Post & { id: number; created_at: string; updated_at: string; };
 }
+
+// Sakenowa ========================================
 
 declare namespace Sakenowa {
   interface Area {

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useAtom, useAtomValue } from 'jotai';
-import { sakenowaDataAtom, selectedBrandAtom, selectedProductAtom, userAtom } from '../../../store';
+import { sakenowaDataAtom, selectedBrandAtom, selectedProductAtom, activeUserAtom } from '../../../store';
 import { getData } from '../../../utils';
 import { Button } from '../../components/Button';
 import { Combobox } from '../../components/Combobox';
@@ -60,16 +60,16 @@ export function Post() {
 
   // User ==================================================
 
-  const [user, setUser] = useAtom(userAtom);
+  const [activeUser, setActiveUser] = useAtom(activeUserAtom);
   const [signature, setSignature] = React.useState<string>('');
 
   React.useEffect(() => {
     if (!signature) {
-      setUser(null);
+      setActiveUser(null);
       return;
     }
     getData<Turso.UserData[]>('/api/users', { name: signature })
-      .then(rows => setUser(rows.length > 0 ? rows[0] : null));
+      .then(rows => setActiveUser(rows.length > 0 ? rows[0] : null));
   }, [signature]);
 
   // Post ==================================================
@@ -86,7 +86,7 @@ export function Post() {
     await submitPost({
       selectedBrand,
       selectedProduct,
-      user,
+      activeUser,
       brand,
       area,
       product,
@@ -103,7 +103,7 @@ export function Post() {
         <pre>Area: {JSON.stringify(area)}</pre>
         <pre>Products: <span className="text-blue-600">{JSON.stringify(productList, null, '  ')}</span></pre>
         <pre>Product: {JSON.stringify(product)} <span className="text-blue-600">{JSON.stringify(selectedProduct, null, '  ')}</span></pre>
-        <pre>User: {JSON.stringify(signature)} <span className="text-blue-600">{JSON.stringify(user, null, '  ')}</span></pre>
+        <pre>User: {JSON.stringify(signature)} <span className="text-blue-600">{JSON.stringify(activeUser, null, '  ')}</span></pre>
       </details>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-y-6">

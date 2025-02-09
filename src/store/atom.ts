@@ -1,11 +1,10 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import { getData } from '../utils/fetchData';
-import { sampleData } from './sample';
 
-export const selectedBrandAtom = atom<Database.BrandData | null>(null);
-export const selectedProductAtom = atom<Database.ProductData | null>(null);
-export const userAtom = atom<Database.UserData | null>(null);
+export const selectedBrandAtom = atom<Turso.BrandData | null>(null);
+export const selectedProductAtom = atom<Turso.ProductData | null>(null);
+export const activeUserAtom = atom<Turso.UserData | null>(null);
 
 
 
@@ -45,7 +44,7 @@ export const brandErrorAtom = atom<string | null>(null);
 // データ取得
 export const brandListAtom = atom<Promise<string[]>>(async () => {
   try {
-    const data = await getData<{ rows: Database.Brand[] }>('/api/brands');
+    const data = await getData<{ rows: Turso.BrandData[] }>('/api/brands');
     return data ? data.rows.map((brand) => brand.name) : [];
   } catch (error) {
     console.error('ブランドリストの取得に失敗:', error);
