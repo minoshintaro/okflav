@@ -8,7 +8,7 @@ app.get('/', async(c) => {
     const { rows } = await turso.execute('SELECT * FROM areas');
     return c.json(rows);
   } catch (error) {
-    return c.json({ success: false, error: 'データ取得に失敗しました' }, 500);
+    return c.json({ success: false, error: 'データ取得ならず' }, 500);
   }
 });
 

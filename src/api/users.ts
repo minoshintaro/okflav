@@ -5,16 +5,10 @@ import { turso, addRecord } from './libs/turso';
 
 const app = new Hono();
 
-// CREATE TABLE users (
-// id INTEGER primary key autoincrement,
-// name TEXT not null
-// );
-
 const userSchema = z.object({
   name: z.string().min(1, '名前は必須'),
 });
 
-// GET /users&name=lorem
 app.get('/', async(c) => {
   const name = c.req.query('name');
   const sql = name ? 'SELECT * FROM users WHERE name = ?' : 'SELECT * FROM users';
@@ -32,11 +26,19 @@ app.post('/', zValidator('json', userSchema), async (c) => {
   const { name } = c.req.valid('json');
 
   try {
-    const result = await addRecord('users', ['name'], [name]);
-    return c.json({ message: 'ユーザー登録', data: result.rows[0] });
+    const { rows } = await addRecord(
+      'users',
+      ['name'],
+      [name]
+    );
+    return c.json({ message: 'ユーザーを追加', data: rows[0] });
   } catch (error) {
-    console.error('エラー：ユーザー登録:', error);
-    return c.json({ error: 'エラー：ユーザー登録' }, 500);
+    if (error instanceof Error) {
+      if (error.message.includes('UNIQUE constraint failed')) {
+        return c.json({ error: '既値あり' }, 400);
+      }
+    }
+    return c.json({ error: '登録失敗' }, 500);
   }
 });
 
