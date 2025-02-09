@@ -17,7 +17,7 @@ export function Textarea({ placeholder = '', value = '', onValueChange }: Textar
       placeholder={placeholder}
       value={value}
       onChange={handleChange}
-      className="rounded-lg bg-gray-100 border border-gray-100 px-4 py-2 resize-none"
+      className="rounded-lg bg-gray-100 border border-gray-100 px-4 py-2 min-h-40 field-sizing-content resize-none"
     />
   );
 }

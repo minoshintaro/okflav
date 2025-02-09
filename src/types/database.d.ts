@@ -9,9 +9,9 @@ namespace Database {
   // name TEXT not null
   // );
   export interface User {
-    id?: number;
     name: string;
   }
+  export type UserData = User & { id: number };
 
   // →  .schema areas
   // CREATE TABLE areas (
@@ -20,9 +20,9 @@ namespace Database {
   // );
 
   export interface Area {
-    id?: number;
     name: string;
   }
+  export type AreaData = Area & { id: number };
 
   // → .schema brands
   // CREATE TABLE brands (
@@ -32,11 +32,11 @@ namespace Database {
   // area_id INTEGER
   // );
   export interface Brand {
-    id?: number;
     name: string;
     furigana?: string;
     area_id?: number;
   }
+  export type BrandData = Brand & { id: number };
 
   // →  .schema products
   // CREATE TABLE products (
@@ -47,11 +47,10 @@ namespace Database {
   // foreign key (brand_id) references brands(id)
   // );
   export interface Product {
-    id?: number;
     brand_id: number;
     name: string;
-    created_at?: string;
   }
+  export type ProductData = Product & { id: number; created_at: string; };
 
   // →  .schema posts
   // CREATE TABLE posts (
@@ -65,13 +64,11 @@ namespace Database {
   // foreign key (user_id) references users(id)
   // );
   export interface Post {
-    id?: number;
-    brand_id: number;
     product_id: number;
     user_id: number;
-    content: string;
-    created_at?: string;
+    message: string;
   }
+  export type PostData = Post & { id: number; created_at: string; created_at: string; };
 
   export interface FlavorColor {
     id?: number;

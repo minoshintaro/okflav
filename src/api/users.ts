@@ -5,21 +5,19 @@ import { turso, addRecord } from './libs/turso';
 
 const app = new Hono();
 
-// PRAGMA table_info('brands');
-// 0 id INTEGER
-// 1 area_id INTEGER NOT NULL
-// 2 name TEXT NOT NULL
-// 3 furigana TEXT
+  // →  .schema users
+  // CREATE TABLE users (
+  // id INTEGER primary key autoincrement,
+  // name TEXT not null
+  // );
 
-const brandSchema = z.object({
-  area_id: z.coerce.number(),
+const userSchema = z.object({
   name: z.string().min(1, '名前は必須です'),
-  furigana: z.string().optional(),
 });
 
 app.get('/', async(c) => {
   const name = c.req.query('name');
-  const sql = name ? 'SELECT * FROM brands WHERE name = ?' : 'SELECT * FROM brands';
+  const sql = name ? 'SELECT * FROM users WHERE name = ?' : 'SELECT * FROM users';
   const args = name ? [name] : [];
   try {
     const { rows } = await turso.execute({ sql, args });
@@ -29,11 +27,11 @@ app.get('/', async(c) => {
   }
 });
 
-app.post('/', zValidator('json', brandSchema), async (c) => {
-  const { area_id, name, furigana } = c.req.valid('json');
+app.post('/', zValidator('json', userSchema), async (c) => {
+  const { name } = c.req.valid('json');
 
   try {
-    const result = await addRecord('brands', ['area_id', 'name', 'furigana'], [area_id, name, furigana || null]);
+    const result = await addRecord('users', ['name'], [name]);
     return c.json({ message: '銘柄が追加されました', data: result.rows[0] });
   } catch (error) {
     if (error instanceof Error) {
@@ -45,4 +43,4 @@ app.post('/', zValidator('json', brandSchema), async (c) => {
   }
 });
 
-export { app as brands };
+export { app as users };

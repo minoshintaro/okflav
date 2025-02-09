@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { users } from './users';
 import { areas } from './areas';
 import { brands } from './brands';
 import { posts } from './posts';
@@ -14,6 +15,7 @@ app.get('/', (c) => {
 });
 
 // ルーティング
+app.route('/users', users);
 app.route('/areas', areas);
 app.route('/posts', posts);
 app.route('/brands', brands);

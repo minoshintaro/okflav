@@ -3,6 +3,9 @@ import { atomFamily } from 'jotai/utils';
 import { getData } from '../utils/fetchData';
 import { sampleData } from './sample';
 
+export const userAtom = atom<Database.UserData | null>(null);
+
+
 export const lineupAtom = atom<Promise<Sample.Product[]>>(async () => {
   return getData<Sample.Product[]>('/api/sample/products');
 });

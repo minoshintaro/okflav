@@ -7,7 +7,7 @@ export type SakenowaAtom = {
   brands: Sakenowa.Brand[];
 };
 
-export const sakenowaAtom = atom(async () => {
+export const sakenowaDataAtom = atom(async () => {
   const [areasData, breweriesData, brandsData] = await Promise.all([
     getData<{ copyright: string; areas: Sakenowa.Area[] }>("/api/sakenowa/areas"),
     getData<{ copyright: string; breweries: Sakenowa.Brewery[] }>("/api/sakenowa/breweries"),
@@ -21,4 +21,4 @@ export const sakenowaAtom = atom(async () => {
   } as SakenowaAtom;
 });
 
-export const targetBrandAtom = atom<Sakenowa.Brand | null>(null);
+export const sakenowaBrandAtom = atom<Sakenowa.Brand | null>(null);

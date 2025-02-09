@@ -1,6 +1,5 @@
 import * as React from 'react';
 import * as Headless from '@headlessui/react';
-// import { XCircleIcon } from '@heroicons/react/24/solid';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
   placeholder: string;
@@ -53,8 +52,10 @@ export function Combobox<T extends { id: number; name: string }>({
         value={current} // 選択された値
         onChange={handleCurrentChange} // (value: T) => void
         onClose={handleClose} // () => void
+        immediate={true}
       >
         <Headless.ComboboxInput
+          autoComplete="off"
           placeholder={placeholder}
           displayValue={(item: T | null) => item?.name ?? ''} // (item: T) => string
           onChange={handleQueryChange} // (event: Event) => void
