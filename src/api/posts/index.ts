@@ -6,5 +6,3 @@ const app = new Hono();
 
 app.route('/', getApp);
 app.route('/', postApp);
-
-export { app as posts };

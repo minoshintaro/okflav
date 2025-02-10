@@ -22,23 +22,45 @@ export async function submitPost({
   signature,
 }: SubmitPost) {
   try {
-    const brand_id = selectedBrand?.id ?? await postData(
-      '/api/brands',
-      { area_id: area.id, name: brand.name }
-    );
-    const product_id = selectedProduct?.id ?? await postData(
-      '/api/products',
-      { brand_id, name: product.name }
-    );
-    const user_id = activeUser?.id ?? await postData(
-      '/api/users',
-      { name: signature }
-    );
-    const newPost = await postData(
-      '/api/posts',
-      { brand_id, product_id, user_id, message }
-    );
+    // 1️⃣ brand を登録 or 取得（直列処理）
+    const brandResponse = selectedBrand ?? await postData<{ id: number }>('/api/brands', {
+      area_id: area.id,
+      name: brand.name,
+    });
+    if (!brandResponse || typeof brandResponse.id !== "number") {
+      throw new Error("ブランドIDの取得に失敗しました");
+    }
+    const brand_id = brandResponse.id;
+
+    // 2️⃣ product を brand_id をもとに登録 or 取得（直列処理）
+    const productResponse = selectedProduct ?? await postData<{ id: number }>('/api/products', {
+      brand_id,
+      name: product.name,
+    });
+    if (!productResponse || typeof productResponse.id !== "number") {
+      throw new Error("商品IDの取得に失敗しました");
+    }
+    const product_id = productResponse.id;
+
+    // 3️⃣ user を登録 or 取得（並列処理）
+    const userResponse = activeUser ?? await postData<{ id: number }>('/api/users', {
+      name: signature,
+    });
+    if (!userResponse || typeof userResponse.id !== "number") {
+      throw new Error("ユーザーIDの取得に失敗しました");
+    }
+    const user_id = userResponse.id;
+
+    // 4️⃣ post を登録
+    const newPost = await postData<{ id: number }>('/api/posts', {
+      brand_id,
+      product_id,
+      user_id,
+      message,
+    });
+
     console.log('newPost:', newPost);
+    alert("投稿しました！");
   } catch (error) {
     console.error("投稿エラー:", error);
     alert("投稿に失敗しました");

@@ -10,19 +10,6 @@ const productSchema = z.object({
   name: z.string().min(1, '名前は必須').max(50, '最大50文字'),
 });
 
-app.get('/', async(c) => {
-  const brandId = c.req.query('brand_id');
-  const sql = brandId ? 'SELECT * FROM products WHERE brand_id = ?' : 'SELECT * FROM products';
-  const args = brandId ? [brandId] : [];
-
-  try {
-    const { rows } = await turso.execute({ sql, args });
-    return c.json(rows);
-  } catch (error) {
-    return c.json({ success: false, error: 'データ取得ならず' }, 500);
-  }
-});
-
 app.post('/', zValidator('json', productSchema), async (c) => {
   const { brand_id, name } = c.req.valid('json');
 
@@ -40,6 +27,19 @@ app.post('/', zValidator('json', productSchema), async (c) => {
       }
     }
     return c.json({ error: '登録失敗' }, 500);
+  }
+});
+
+app.get('/', async(c) => {
+  const brandId = c.req.query('brand_id');
+  const sql = brandId ? 'SELECT * FROM products WHERE brand_id = ?' : 'SELECT * FROM products';
+  const args = brandId ? [brandId] : [];
+
+  try {
+    const { rows } = await turso.execute({ sql, args });
+    return c.json(rows);
+  } catch (error) {
+    return c.json({ success: false, error: 'データ取得ならず' }, 500);
   }
 });
 
