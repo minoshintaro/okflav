@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { useAtomValue } from 'jotai';
-import { collectionAtom } from '../../../store/atom';
+import { lineupAtom, collectionAtom } from '../../../store/atom';
 import { Detail } from '../Detail';
 
 type CollectionProps = {
@@ -8,7 +8,12 @@ type CollectionProps = {
 };
 
 export function Collection({ category }: CollectionProps) {
-  const data = useAtomValue(collectionAtom(category));  // Jotai からデータ取得
+  const lineup = useAtomValue(lineupAtom);
+  const data = useAtomValue(collectionAtom(category));
+
+  function findProduct(productId: number) {
+    return lineup.find((item) => item.id === productId);
+  }
 
   if (!data) return <div>Loading...</div>;
 
@@ -18,9 +23,9 @@ export function Collection({ category }: CollectionProps) {
       {data.map((item) => (
         <section key="item.id">
           <Detail
-            brandName={item.brandName}
-            productName={item.name}
-            area={item.area}
+            brandName={findProduct(item.productId)?.brandName ?? '無名'}
+            productName={findProduct(item.productId)?.name ?? '無名'}
+            area={findProduct(item.productId)?.area ?? '無名'}
             starColor={item.startColor}
             endColor={item.endColor}
             content={item.content}

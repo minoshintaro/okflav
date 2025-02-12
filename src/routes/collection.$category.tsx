@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Collection } from '../app/featrues/Collection'
+import { Collection } from '../app/layouts/Collection'
 
 export const Route = createFileRoute('/collection/$category')({
   component: CollectionPage,

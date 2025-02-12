@@ -2,7 +2,13 @@ import { Hono } from 'hono';
 
 const app = new Hono();
 
-const products: Sample.Product[] = [
+export type SampleProduct = {
+  id: number;
+  brandName: string;
+  name: string;
+  area: string;
+};
+const products: SampleProduct[] = [
   { id: 1, brandName: '八海山', name: '純米大吟醸 雪室貯蔵三年', area: '新潟' },
   { id: 2, brandName: '獺祭', name: '純米大吟醸 磨き二割三分 遠心分離', area: '山口' },
   { id: 3, brandName: '雪男', name: '純米酒', area: '新潟' },
@@ -14,7 +20,17 @@ const products: Sample.Product[] = [
   { id: 9, brandName: '大納川', name: '純米', area: '秋田' },
 ];
 
-const posts: Sample.Post[] = [
+export type SamplePost = {
+  id: number;
+  productId: number;
+  userId: number;
+  date: string;
+  startColor: string;
+  endColor: string;
+  content: string;
+};
+
+const posts = [
   {
     id: 1,
     productId: 6,
