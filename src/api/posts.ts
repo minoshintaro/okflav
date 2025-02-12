@@ -1,34 +1,53 @@
 import { Hono } from 'hono';
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
-import { turso, addRecord } from './libs/turso';
+import { DUMMY_ID } from '../constants';
+import { turso, addRecord, findTargetId } from './libs/turso';
 
 const app = new Hono();
 
 const postSchema = z.object({
-  product_id: z.number(),
-  user_id: z.number(),
+  area_id: z.number(),
+  brand_id: z.number().optional(),
+  brand_name: z.string(),
+  product_id: z.number().optional(),
+  product_name: z.string(),
   message: z.string().min(1, 'メッセージは必須'),
+  signature: z.string(),
 });
 
-
 app.post('/', zValidator('json', postSchema), async (c) => {
-  const { product_id, user_id, message } = c.req.valid('json');
+  const { area_id, brand_id, brand_name, product_id, product_name, message, signature } = c.req.valid('json');
 
   try {
-    const { rows } = await addRecord(
-      'posts',
-      ['product_id', 'user_id', 'message'],
-      [product_id, user_id, message]
-    );
-    return c.json({ message: '投稿を追加', data: rows[0] });
-  } catch (error) {
-    if (error instanceof Error) {
-      if (error.message.includes('UNIQUE constraint failed')) {
-        return c.json({ error: '既値あり' }, 400);
-      }
+    await turso.execute('BEGIN TRANSACTION');
+
+    let brandId = brand_id;
+    if (brand_id === DUMMY_ID) {
+      const { rows } = await addRecord('brands', ['area_id', 'name'], [area_id, brand_name]);
+      brandId = Number(rows[0].id);
     }
-    return c.json({ error: '登録失敗' }, 500);
+
+    let productId = product_id;
+    if (product_id === DUMMY_ID) {
+      const { rows } = await addRecord('products', ['brand_id', 'name'], [brandId, product_name]);
+      productId = Number(rows[0].id);
+    }
+
+    let userId = await findTargetId('users', 'name', signature);
+    if (!userId) {
+      const { rows } = await addRecord('users', ['name'], [signature]);
+      userId = Number(rows[0].id);
+    }
+
+    const newPost = await addRecord('posts', ['product_id', 'user_id', 'message'], [productId, userId, message]);
+
+    await turso.execute('COMMIT');
+
+    return c.json({ success: true, data: newPost});
+  } catch (error) {
+    await turso.execute('ROLLBACK');
+    return c.json({ success: false, error: 'Failed to create post.' }, 500);
   }
 });
 

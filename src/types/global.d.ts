@@ -9,23 +9,27 @@ interface Area {
 }
 interface Brand {
   name: string;
-  area_id?: number;
+  area_id: number;
 }
 interface Product {
   name: string;
   brand_id: number;
 }
 interface Post {
-  message: string;
+  area_id: number;
+  brand_id: number;
+  brand_name: string;
   product_id: number;
-  user_id: number;
+  product_name: string;
+  message: string;
+  signature: string;
 }
 declare namespace Turso {
   type UserData = User & { id: number };
   type AreaData = Area;
   type BrandData = Brand & { id: number };
-  type ProductData = Product & { id: number; created_at: string; };
-  type PostData = Post & { id: number; created_at: string; updated_at: string; };
+  type ProductData = Product & { id: number; created_at?: string; };
+  type PostData = Post & { id: number; created_at?: string; updated_at?: string; };
 }
 
 // Sakenowa ========================================

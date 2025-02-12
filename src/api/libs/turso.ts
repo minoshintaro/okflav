@@ -1,17 +1,5 @@
 import { createClient, type ResultSet } from "@libsql/client";
 
-function createPlaceholder(count: number): string {
-  return new Array(count).fill('?').join(', ');
-}
-
-function createSet(columns: string[]): string {
-  return columns.map(col => `${col} = ?`).join(', ');
-}
-
-function createWhere(columns: string[]): string {
-  return columns.map(col => `${col} = ?`).join(' AND ');
-}
-
 export const turso = createClient({
   url: process.env.TURSO_DATABASE_URL!,
   authToken: process.env.TURSO_AUTH_TOKEN!,
@@ -23,11 +11,15 @@ export async function findTargetId(
   value: string,
 ): Promise<number | null> {
   const { rows } = await turso.execute({
-    sql: `SELECT id FROM ${table} WHERE ${column} = ?`,
+    sql: `
+      SELECT id
+        FROM ${table}
+        WHERE ${column} = ?
+    `,
     args: [value],
   });
 
-  return rows.length > 0 && rows[0].id !== null ? Number(rows[0].id) : null;
+  return rows.length > 0 ? Number(rows[0].id) : null;
 }
 
 export async function addRecord(
@@ -35,12 +27,16 @@ export async function addRecord(
   columns: string[],
   values: any[]
 ): Promise<ResultSet> {
+  function createPlaceholder(count: number): string {
+    return new Array(count).fill('?').join(', ');
+  }
+
   const result = await turso.execute({
     sql: `
       INSERT
         INTO ${table} (${columns.join(', ')})
         VALUES (${createPlaceholder(columns.length)})
-      `,
+    `,
     args: values,
   });
 
@@ -54,6 +50,14 @@ export async function updateRecord(
   conditionColumns: string[],
   conditionValues: any[]
 ): Promise<ResultSet> {
+  function createSet(columns: string[]): string {
+    return columns.map(col => `${col} = ?`).join(', ');
+  }
+
+  function createWhere(columns: string[]): string {
+    return columns.map(col => `${col} = ?`).join(' AND ');
+  }
+
   const result = await turso.execute({
     sql: `
       UPDATE ${table}

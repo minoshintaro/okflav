@@ -1,97 +1,119 @@
 import * as React from 'react';
-import { useAtom, useAtomValue } from 'jotai';
-import { sakenowaDataAtom, selectedBrandAtom, selectedProductAtom, activeUserAtom } from '../../../store';
-import { getData } from '../../../utils';
+// import { useMutation } from '@tanstack/react-query';
+import { useAtom } from 'jotai';
+import { DUMMY_ID } from '../../../constants';
+import { cachedBrandDataAtom, cachedProductDataAtom, signatureAtom } from '../../../store';
+import { useSakenowaData, useBrandData, useProductList, usePostData } from '../../hooks';
 import { Button } from '../../components/Button';
 import { Combobox } from '../../components/Combobox';
 import { Textarea } from '../../components/Textarea';
 import { TextField } from '../../components/TextField';
-import { getBrandDetails } from './getBrandDetails';
+import { getAreaId } from './utils';
 import { submitPost } from './submitPost';
 
 export function Post() {
-  // さけのわデータ
-  const sakenowaData = useAtomValue(sakenowaDataAtom);
+  // ローカルステート
+  const [selectedBrand, setSelectedBrand] = React.useState<Sakenowa.Brand | null>(null);
+  const [selectedProduct, setSelectedProduct] = React.useState<Turso.ProductData | null>(null);
+  const [message, setMessage] = React.useState<string>('');
 
-  // Brand =================================================
+  // グローバルステート
+  const [cachedBrandData, setCachedBrandData] = useAtom(cachedBrandDataAtom);
+  const [cachedProductData, setCachedProductData] = useAtom(cachedProductDataAtom);
+  const [signature, setSignature] = useAtom(signatureAtom);
 
-  const [selectedBrand, setSelectedBrand] = useAtom(selectedBrandAtom);
-  const [brand, setBrand] = React.useState<Sakenowa.Brand | null>(null);
-  const [area, setArea] = React.useState<Sakenowa.Area | null>(null);
-  const [productList, setProductList] = React.useState<Turso.ProductData[]>([]);
+  // データ
+  const sakenowaData = useSakenowaData();
+  const { data: brandData } = useBrandData(selectedBrand?.name ?? null);
+  const { data: productList } = useProductList(cachedBrandData?.id ?? null);
+
+  /**
+   * # Brand
+   *
+   * Sakenowa銘柄一覧のコンボボックスから、
+   * - Sakenowa銘柄を選択
+   *   - 同じTurso銘柄があれば、それをキャッシュ
+   *   - なければ、新規データを構成してキャッシュ（idはダミー）
+   * - 自由入力
+   *   - 新規データを構成してキャッシュ（idはダミー）
+   */
 
   React.useEffect(() => {
-    if (!brand) {
-      setSelectedBrand(null);
-      setArea(null);
-      return;
-    }
-    getData<Turso.BrandData[]>('/api/brands', { name: brand.name })
-      .then(rows => setSelectedBrand(rows.length > 0 ? rows[0] : null));
-
-    const brandDetails = getBrandDetails(sakenowaData, brand);
-    if (brandDetails) {
-      setArea(brandDetails.area);
-    }
-  }, [brand]);
-
-  React.useEffect(() => {
+    // 未選択なら、
     if (!selectedBrand) {
-      setProductList([]);
-      return;
-    }
-    getData<Turso.ProductData[]>('/api/products', { brand_id: String(selectedBrand.id) })
-      .then(rows => setProductList(rows.length > 0 ? rows : []));
-  }, [selectedBrand]);
-
-  // Product =================================================
-
-  const [selectedProduct, setSelectedProduct] = useAtom(selectedProductAtom);
-  const [product, setProduct] = React.useState<Turso.ProductData | null>(null);
-
-  React.useEffect(() => {
-    if (!product) {
+      setCachedBrandData(null);
       setSelectedProduct(null);
       return;
     }
-    const matchedProduct = productList.find(row => row.name === product.name);
-    setSelectedProduct(matchedProduct || null);
-  }, [product]);
 
-  // User ==================================================
-
-  const [activeUser, setActiveUser] = useAtom(activeUserAtom);
-  const [signature, setSignature] = React.useState<string>('');
-
-  React.useEffect(() => {
-    if (!signature) {
-      setActiveUser(null);
+    // 自由入力なら DUMMY_ID のオブジェクトなので、
+    if (selectedBrand.id === DUMMY_ID) {
+      setCachedBrandData({ id: DUMMY_ID, area_id: DUMMY_ID, name: selectedBrand.name });
       return;
     }
-    getData<Turso.UserData[]>('/api/users', { name: signature })
-      .then(rows => setActiveUser(rows.length > 0 ? rows[0] : null));
-  }, [signature]);
+
+    // Sakenowaの銘柄を選んだら、
+    setCachedBrandData(
+      brandData && brandData.length > 0
+        ? brandData[0] // 既存データ
+        : {
+          id: DUMMY_ID,
+          area_id: getAreaId(sakenowaData, selectedBrand) ?? DUMMY_ID,
+          name: selectedBrand.name
+        } // 新規登録データ
+    );
+  }, [selectedBrand, brandData]);
+
+  React.useEffect(() => {
+    // 未選択なら、
+    if (!selectedProduct || !cachedBrandData) {
+      setCachedProductData(null);
+      return;
+    }
+
+    // 自由入力なら DUMMY_ID のオブジェクトなので、
+    if (selectedProduct.id === DUMMY_ID) {
+      setCachedProductData({ id: DUMMY_ID, brand_id: cachedBrandData.id, name: selectedProduct.name });
+      return;
+    }
+
+    // Tursoの商品を選んだら、
+    setCachedProductData(selectedProduct);
+  }, [selectedProduct, cachedBrandData]);
 
   // Post ==================================================
 
-  const [message, setMessage] = React.useState<string>('');
+  const { mutate } = usePostData();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (!brand || !area || !product || !message || !signature) {
+
+    if (!cachedBrandData || !cachedProductData || !message || !signature) {
       alert('未選択の項目があります');
       return;
     }
 
-    await submitPost({
-      selectedBrand,
-      selectedProduct,
-      activeUser,
-      brand,
-      area,
-      product,
+    const newPost: Post = {
+      area_id: cachedBrandData.area_id,
+      brand_id: cachedBrandData.id,
+      brand_name: cachedBrandData.name,
+      product_id: cachedProductData.id,
+      product_name: cachedProductData.name,
       message,
       signature,
+    };
+
+    console.log('送信するデータ:', JSON.stringify(newPost, null, '  '));
+
+    mutate(newPost, {
+      onSuccess: (data) => {
+        console.log('投稿成功:', data);
+        alert('投稿が成功しました！');
+      },
+      onError: (err) => {
+        console.error('投稿エラー:', err);
+        alert('投稿に失敗しました。');
+      },
     });
   };
 
@@ -99,11 +121,11 @@ export function Post() {
     <>
       <details open className="mb-4 text-xs">
         <summary>Debug</summary>
-        <pre>Brand: {JSON.stringify(brand)} <span className="text-blue-600">{JSON.stringify(selectedBrand, null, '  ')}</span></pre>
-        <pre>Area: {JSON.stringify(area)}</pre>
+        <pre>Turso: {JSON.stringify(brandData)}</pre>
+        <pre>Brand: {JSON.stringify(selectedBrand,)} <span className="text-blue-600">{JSON.stringify(cachedBrandData, null, '  ')}</span></pre>
         <pre>Products: <span className="text-blue-600">{JSON.stringify(productList, null, '  ')}</span></pre>
-        <pre>Product: {JSON.stringify(product)} <span className="text-blue-600">{JSON.stringify(selectedProduct, null, '  ')}</span></pre>
-        <pre>User: {JSON.stringify(signature)} <span className="text-blue-600">{JSON.stringify(activeUser, null, '  ')}</span></pre>
+        <pre>Product: <span className="text-blue-600">{JSON.stringify(cachedProductData, null, '  ')}</span></pre>
+        <pre>User: <span className="text-blue-600">{JSON.stringify(signature, null, '  ')}</span></pre>
       </details>
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-y-6">
@@ -111,14 +133,14 @@ export function Post() {
           <Combobox
             placeholder="銘柄（例：八海山）"
             list={sakenowaData.brands}
-            current={brand}
-            onCurrentChange={setBrand}
+            current={selectedBrand}
+            onCurrentChange={setSelectedBrand}
           />
           <Combobox
             placeholder="名称（例：純米大吟醸 雪室貯蔵三年）"
-            list={productList}
-            current={product}
-            onCurrentChange={setProduct}
+            list={productList ?? []}
+            current={selectedProduct}
+            onCurrentChange={setSelectedProduct}
           />
           <Textarea
             placeholder="香りや味わいは？"

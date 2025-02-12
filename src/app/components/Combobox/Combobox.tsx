@@ -1,5 +1,6 @@
 import * as React from 'react';
 import * as Headless from '@headlessui/react';
+import { DUMMY_ID } from '../../../constants';
 import { filterList } from './utils';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
@@ -26,7 +27,6 @@ export function Combobox<T extends { id: number; name: string }>({
 
   const handleCurrentChange = (item: T | null) => {
     onCurrentChange(item);
-    // setQuery(item?.name ?? '');
   };
 
   const handleClose = () => {
@@ -34,62 +34,33 @@ export function Combobox<T extends { id: number; name: string }>({
   };
 
   return (
-    <>
-      <Headless.Combobox
-        value={current} // 選択された値
-        onChange={handleCurrentChange} // (value: T) => void
-        onClose={handleClose} // () => void
-        immediate={true}
+    <Headless.Combobox
+      value={current}
+      onChange={handleCurrentChange} // (value: T) => void
+      onClose={handleClose} // () => void
+      immediate={true}
+    >
+      <Headless.ComboboxInput
+        placeholder={placeholder}
+        displayValue={(item: T | null) => item?.name ?? ''} // (item: T | null) => string
+        onChange={handleQueryChange} // (event: Event) => void
+        autoComplete="off"
+        className="rounded-full bg-gray-100 border border-gray-100 px-4 py-2"
+      />
+      <Headless.ComboboxOptions
+        anchor="bottom start"
+        className="w-fit rounded border bg-white space-y-1 p-1 empty:invisible"
       >
-        <Headless.ComboboxInput
-          autoComplete="off"
-          placeholder={placeholder}
-          displayValue={(item: T | null) => item?.name ?? ''} // (item: T) => string
-          onChange={handleQueryChange} // (event: Event) => void
-          className="rounded-full bg-gray-100 border border-gray-100 px-4 py-2"
-        />
-        <Headless.ComboboxOptions
-          anchor="bottom start"
-          className="w-fit rounded border bg-white space-y-1 p-1 empty:invisible"
-        >
-          {query.length > 0 && !(
-            filteredList.length === 1 && filteredList[0].name === query
-          ) && (
-              <OriginalOption query={query} />
-            )}
-          {filteredList.map(item => (
-            <ComboboxOption key={item.id} item={item} />
-          ))}
-        </Headless.ComboboxOptions>
-      </Headless.Combobox>
-    </>
-  );
-}
-
-type ComboboxOptionProps<T extends { id: number; name: string }> = {
-  item: T;
-};
-function ComboboxOption<T extends { id: number; name: string }>({ item }: ComboboxOptionProps<T>) {
-  return (
-    <Headless.ComboboxOption
-      value={item}
-      className="p-1 cursor-pointer data-[focus]:bg-blue-100"
-    >
-      {item.name}
-    </Headless.ComboboxOption>
-  );
-}
-
-type OriginalOptionProps = {
-  query: string;
-};
-function OriginalOption({ query }: OriginalOptionProps) {
-  return (
-    <Headless.ComboboxOption
-      value={{ id: -1, name: query }}
-      className="p-1 cursor-pointer data-[focus]:bg-blue-100"
-    >
-      <span className="text-gray-500">{query}</span>
-    </Headless.ComboboxOption>
+        {filteredList.map(item => (
+          <Headless.ComboboxOption
+            key={item.id}
+            value={item}
+            className="p-1 cursor-pointer focus:bg-blue-100"
+          >
+            {item.id === DUMMY_ID ? <span className="text-gray-500">{item.name}</span> : item.name}
+          </Headless.ComboboxOption>
+        ))}
+      </Headless.ComboboxOptions>
+    </Headless.Combobox>
   );
 }

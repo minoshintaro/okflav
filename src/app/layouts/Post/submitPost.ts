@@ -22,6 +22,8 @@ export async function submitPost({
   signature,
 }: SubmitPost) {
   try {
+
+
     // 1️⃣ brand を登録 or 取得（直列処理）
     const brandResponse = selectedBrand ?? await postData<{ id: number }>('/api/brands', {
       area_id: area.id,
