@@ -10,7 +10,6 @@ export const Route = createFileRoute('/form')({
 function RouteComponent() {
   const [brandName, setBrandName] = React.useState('');
   const [areaId, setAreaId] = React.useState('');
-  const [furigana, setFurigana] = React.useState('');
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault(); // フォームのデフォルト送信を防ぐ
@@ -19,7 +18,7 @@ function RouteComponent() {
       const response = await fetch('/api/brands', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ area_id: areaId, name: brandName, furigana }),
+        body: JSON.stringify({ area_id: areaId, name: brandName }),
       });
 
       if (!response.ok) {
@@ -36,9 +35,8 @@ function RouteComponent() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-      <TextField placeholder="銘柄" value={brandName} onChange={setBrandName} />
-      <TextField placeholder="ふりがな" value={furigana} onChange={setFurigana} />
-      <TextField placeholder="地域" value={areaId} onChange={setAreaId} />
+      <TextField placeholder="銘柄" value={brandName} onValueChange={setBrandName} />
+      <TextField placeholder="地域" value={areaId} onValueChange={setAreaId} />
       <Button type="submit">送信</Button>
     </form>
   );

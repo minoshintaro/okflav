@@ -1,35 +1,27 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
 import { getData } from '../utils/fetchData';
+import type { SampleProduct, SamplePost } from '../api/sample';
 
 export const cachedBrandDataAtom = atom<Turso.BrandData | null>(null);
 export const cachedProductDataAtom = atom<Turso.ProductData | null>(null);
 export const signatureAtom = atom<string>('');
 
+// サンプルデータ ==================================================
 
-
-
-
-
-
-
-
-
-
-
-export const lineupAtom = atom<Promise<Sample.Product[]>>(async () => {
-  return getData<Sample.Product[]>('/api/sample/products');
+export const lineupAtom = atom<Promise<SampleProduct[]>>(async () => {
+  return getData('/api/sample/products');
 });
 
-export const collectionAtom = atomFamily((key: string) => atom(async (get) => {
-  return getData<Sample.Product[]>(`/api/sample/${key}`);
+export const collectionAtom = atomFamily((key: string) => atom<Promise<SamplePost[]>>(async () => {
+  return getData(`/api/sample/${key}`);
 }));
 
-export const selectedPostAtom = atom<string>('latest');
-export const postDataAtom = atom((get) => {
-  const category = get(selectedPostAtom);
-  return (sampleData.post)[category] || [];
-});
+// export const selectedPostAtom = atom<string>('latest');
+// export const postDataAtom = atom((get) => {
+//   const category = get(selectedPostAtom);
+//   return (sampleData.post)[category] || [];
+// });
 
 
 
