@@ -1,5 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Hina+Mincho&family=Noto+Serif+JP&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-display: 'Roboto', sans-serif;
+  --font-mincho: 'Hina Mincho', serif;
+}
+
+body::-webkit-scrollbar { display:none; }
+
+#root {
+  isolation: isolate;
 }

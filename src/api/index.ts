@@ -1,15 +1,26 @@
-import { serve } from '@hono/node-server'
 import { Hono } from 'hono';
+import { users } from './users';
+import { areas } from './areas';
+import { brands } from './brands';
+import { posts } from './posts';
+import { products } from './products';
+import { sakenowa } from './sakenowa';
+import { sample } from './sample';
 
-const api = new Hono().basePath('/api');
+const app = new Hono().basePath('/api');
 
-api.get('/', (c) => {
-  return c.text('Hello, world!');
+app.get('/', (c) => {
+  const message = 'Hello, world!';
+  return c.text(`${message}`);
 });
 
-serve({
-  fetch: api.fetch,
-  port: 3000,
-});
+// ルーティング
+app.route('/users', users);
+app.route('/areas', areas);
+app.route('/posts', posts);
+app.route('/brands', brands);
+app.route('/products', products);
+app.route('/sakenowa', sakenowa);
+app.route('/sample', sample);
 
-console.log('Server is running on port 3000');
+export default app;
