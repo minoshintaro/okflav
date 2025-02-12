@@ -36,6 +36,7 @@
     "@hono/vite-dev-server": "^0.18.1",
     "@tanstack/router-devtools": "^1.102.5",
     "@tanstack/router-plugin": "^1.102.5",
+    "@types/diff": "^7.0.1",
     "@types/node": "^22.13.1",
     "@types/react": "^19.0.8",
     "@types/react-dom": "^19.0.3",
