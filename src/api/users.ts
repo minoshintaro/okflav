@@ -6,7 +6,7 @@ import { turso, addRecord } from './libs/turso';
 const app = new Hono();
 
 const userSchema = z.object({
-  name: z.string().min(1, '名前は必須'),
+  name: z.string(),
 });
 
 app.post('/', zValidator('json', userSchema), async (c) => {

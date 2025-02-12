@@ -1,4 +1,5 @@
 import { createClient, type ResultSet } from "@libsql/client";
+import { TABLES } from "../../constants";
 
 export const turso = createClient({
   url: process.env.TURSO_DATABASE_URL!,
@@ -27,15 +28,16 @@ export async function addRecord(
   columns: string[],
   values: any[]
 ): Promise<ResultSet> {
-  function createPlaceholder(count: number): string {
-    return new Array(count).fill('?').join(', ');
+  if (!TABLES.includes(table)) {
+    throw new Error(`不正なテーブル名: ${table}`);
   }
 
+  const placeholder = new Array(columns.length).fill('?').join(', ');
   const result = await turso.execute({
     sql: `
       INSERT
         INTO ${table} (${columns.join(', ')})
-        VALUES (${createPlaceholder(columns.length)})
+        VALUES (${placeholder})
     `,
     args: values,
   });

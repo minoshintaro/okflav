@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
-// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
-
 export function usePostData() {
-  return useMutation<Turso.PostData, Error, Post>({
-    mutationFn: async (newPost: Post) => {
-      const response = await fetch(`/api/posts/`, {
+  return useMutation<Turso.PostData, Error, NewPost>({
+    mutationFn: async (newPost: NewPost) => {
+      console.log('To:', window.location.origin + '/api/posts');
+
+      const response = await fetch(`/api/posts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(newPost),
@@ -17,7 +17,7 @@ export function usePostData() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      return response.json();
+      return response.json() as Promise<Turso.PostData>;
     },
   });
 }

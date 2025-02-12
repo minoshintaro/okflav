@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+// import { cors } from 'hono/cors'
 import { z } from 'zod'
 import { zValidator } from '@hono/zod-validator'
 import { DUMMY_ID } from '../constants';
@@ -7,40 +8,44 @@ import { turso, addRecord, findTargetId } from './libs/turso';
 const app = new Hono();
 
 const postSchema = z.object({
-  area_id: z.number(),
-  brand_id: z.number().optional(),
-  brand_name: z.string(),
-  product_id: z.number().optional(),
-  product_name: z.string(),
-  message: z.string().min(1, 'メッセージは必須'),
-  signature: z.string(),
+  areaId: z.number().int(),
+  brandId: z.number().int(),
+  brandName: z.string(),
+  productId: z.number().int(),
+  productName: z.string(),
+  userName: z.string(),
+  message: z.string(),
 });
 
 app.post('/', zValidator('json', postSchema), async (c) => {
-  const { area_id, brand_id, brand_name, product_id, product_name, message, signature } = c.req.valid('json');
+  const { areaId, brandId, brandName, productId, productName, userName, message } = c.req.valid('json');
 
   try {
     await turso.execute('BEGIN TRANSACTION');
 
-    let brandId = brand_id;
+    let brand_id = brandId;
     if (brand_id === DUMMY_ID) {
-      const { rows } = await addRecord('brands', ['area_id', 'name'], [area_id, brand_name]);
-      brandId = Number(rows[0].id);
+      const { rows } = await addRecord('brands', ['area_id', 'name'], [areaId, brandName]);
+      brand_id = Number(rows[0].id);
     }
 
-    let productId = product_id;
+    let product_id = productId;
     if (product_id === DUMMY_ID) {
-      const { rows } = await addRecord('products', ['brand_id', 'name'], [brandId, product_name]);
-      productId = Number(rows[0].id);
+      const { rows } = await addRecord('products', ['brand_id', 'name'], [brand_id, productName]);
+      product_id = Number(rows[0].id);
     }
 
-    let userId = await findTargetId('users', 'name', signature);
-    if (!userId) {
-      const { rows } = await addRecord('users', ['name'], [signature]);
-      userId = Number(rows[0].id);
+    let user_id = await findTargetId('users', 'name', userName);
+    if (!user_id) {
+      const { rows } = await addRecord('users', ['name'], [userName]);
+      user_id = Number(rows[0].id);
     }
 
-    const newPost = await addRecord('posts', ['product_id', 'user_id', 'message'], [productId, userId, message]);
+    const newPost = await addRecord(
+      'posts',
+      ['product_id', 'user_id', 'message'],
+      [product_id, user_id, message]
+    );
 
     await turso.execute('COMMIT');
 
@@ -56,11 +61,11 @@ async function getPosts(condition: string = '', args: any[] = []) {
     const sql = `
       select
         p.id,
+        brands.name as brand_name,
+        products.name as product_name,
+        areas.name as area_name,
         p.message,
         users.name as user_name,
-        products.name as product_name,
-        brands.name as brand_name,
-        areas.name as area_name,
         p.created_at,
         p.updated_at
       from posts as p
@@ -80,7 +85,7 @@ async function getPosts(condition: string = '', args: any[] = []) {
   }
 }
 
-app.get('/latest', async (c) => {
+app.get('/', async (c) => {
   const { rows } = await getPosts();
   return c.json(rows);
 });

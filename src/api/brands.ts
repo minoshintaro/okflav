@@ -6,8 +6,8 @@ import { turso, addRecord } from './libs/turso';
 const app = new Hono();
 
 const brandSchema = z.object({
-  area_id: z.coerce.number().nullable(),
-  name: z.string().min(1, '名前は必須'),
+  area_id: z.coerce.number().int(),
+  name: z.string(),
 });
 
 app.post('/', zValidator('json', brandSchema), async (c) => {

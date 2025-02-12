@@ -9,7 +9,6 @@ import { Combobox } from '../../components/Combobox';
 import { Textarea } from '../../components/Textarea';
 import { TextField } from '../../components/TextField';
 import { getAreaId } from './utils';
-import { submitPost } from './submitPost';
 
 export function Post() {
   // ローカルステート
@@ -37,7 +36,6 @@ export function Post() {
    * - 自由入力
    *   - 新規データを構成してキャッシュ（idはダミー）
    */
-
   React.useEffect(() => {
     // 未選択なら、
     if (!selectedBrand) {
@@ -48,7 +46,7 @@ export function Post() {
 
     // 自由入力なら DUMMY_ID のオブジェクトなので、
     if (selectedBrand.id === DUMMY_ID) {
-      setCachedBrandData({ id: DUMMY_ID, area_id: DUMMY_ID, name: selectedBrand.name });
+      setCachedBrandData({ id: DUMMY_ID, areaId: DUMMY_ID, name: selectedBrand.name });
       return;
     }
 
@@ -58,12 +56,15 @@ export function Post() {
         ? brandData[0] // 既存データ
         : {
           id: DUMMY_ID,
-          area_id: getAreaId(sakenowaData, selectedBrand) ?? DUMMY_ID,
+          areaId: getAreaId(sakenowaData, selectedBrand) ?? DUMMY_ID,
           name: selectedBrand.name
-        } // 新規登録データ
+        } as Turso.BrandData // 新規登録データ
     );
   }, [selectedBrand, brandData]);
 
+  /**
+   * # Product
+   */
   React.useEffect(() => {
     // 未選択なら、
     if (!selectedProduct || !cachedBrandData) {
@@ -73,7 +74,7 @@ export function Post() {
 
     // 自由入力なら DUMMY_ID のオブジェクトなので、
     if (selectedProduct.id === DUMMY_ID) {
-      setCachedProductData({ id: DUMMY_ID, brand_id: cachedBrandData.id, name: selectedProduct.name });
+      setCachedProductData({ id: DUMMY_ID, brandId: cachedBrandData.id, name: selectedProduct.name, createdAt: '' });
       return;
     }
 
@@ -93,14 +94,14 @@ export function Post() {
       return;
     }
 
-    const newPost: Post = {
-      area_id: cachedBrandData.area_id,
-      brand_id: cachedBrandData.id,
-      brand_name: cachedBrandData.name,
-      product_id: cachedProductData.id,
-      product_name: cachedProductData.name,
+    const newPost: NewPost = {
+      areaId: cachedBrandData.areaId,
+      brandId: cachedBrandData.id,
+      brandName: cachedBrandData.name,
+      productId: cachedProductData.id,
+      productName: cachedProductData.name,
+      userName: signature,
       message,
-      signature,
     };
 
     console.log('送信するデータ:', JSON.stringify(newPost, null, '  '));
