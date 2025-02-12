@@ -10,6 +10,7 @@ import { sample } from './sample';
 const app = new Hono().basePath('/api');
 
 app.get('/', (c) => {
+  console.log("Request URL:", c.req.url);
   const message = 'Hello, world!';
   return c.text(`${message}`);
 });
