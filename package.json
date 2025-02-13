@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "run-p dev:api dev:app",
-    "dev:api": "cross-env $(cat .env.local | xargs) tsx watch src/routes/api/index.ts",
+    "dev:api": "cross-env $(cat .env.local | xargs) tsx watch src/api/index.ts",
     "dev:app": "vite",
     "build": "tsc -b && vite build",
     "deploy": "npm run build && vercel",

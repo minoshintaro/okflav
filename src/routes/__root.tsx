@@ -3,7 +3,7 @@ import { createRootRoute, Outlet } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/router-devtools';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { CircleButton } from '../app/components/CircleButton';
-import { Header } from '../app/featrues/Header/Header';
+import { Header } from '../app/features/Header';
 
 export const Route = createRootRoute({
   component: () => (
