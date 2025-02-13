@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { getData } from "../utils/fetchData";
+import { getData } from "../../utils/fetchData";
 
 export type SakenowaData = {
   areas: Sakenowa.Area[];

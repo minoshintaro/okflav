@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { useAtomValue } from 'jotai';
-import { lineupAtom, collectionAtom } from '../../../store/atom';
+import { lineupAtom, collectionAtom } from '../../store/atom';
 import { Detail } from '../Detail';
 
 type CollectionProps = {
