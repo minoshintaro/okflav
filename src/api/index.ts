@@ -1,13 +1,32 @@
 import { Hono } from 'hono';
-import { users } from './users';
+import { handle } from 'hono/vercel';
+import { serve } from '@hono/node-server';
 import { areas } from './areas';
 import { brands } from './brands';
 import { posts } from './posts';
 import { products } from './products';
 import { sakenowa } from './sakenowa';
 import { sample } from './sample';
+import { users } from './users';
+
+export const runtime = 'edge'
 
 const app = new Hono().basePath('/api');
+
+if (!process.env.VERCEL) {
+  const server = serve({
+    fetch: app.fetch,
+    port: 3000,
+  }, () => {
+    console.log('Server is running on http://localhost:3000');
+  });
+
+  process.on('SIGINT', () => {
+    console.log("Shutting down the server...");
+    server.close?.(); // `close()` が存在する場合のみ実行
+    process.exit(0);
+  });
+}
 
 app.get('/', (c) => {
   console.log("Request URL:", c.req.url);
@@ -16,12 +35,14 @@ app.get('/', (c) => {
 });
 
 // ルーティング
-app.route('/users', users);
+
 app.route('/areas', areas);
-app.route('/posts', posts);
 app.route('/brands', brands);
+app.route('/posts', posts);
 app.route('/products', products);
 app.route('/sakenowa', sakenowa);
 app.route('/sample', sample);
+app.route('/users', users);
 
-export default app;
+export const GET = handle(app)
+export const POST = handle(app)

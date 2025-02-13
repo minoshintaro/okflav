@@ -2,7 +2,7 @@ import * as React from 'react';
 // import { useMutation } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { DUMMY_ID } from '../../../constants';
-import { cachedBrandDataAtom, cachedProductDataAtom, signatureAtom } from '../../../store';
+import { cachedBrandDataAtom, cachedProductDataAtom, signatureAtom } from '../../store';
 import { useSakenowaData, useBrandData, useProductList, usePostData } from '../../hooks';
 import { Button } from '../../components/Button';
 import { Combobox } from '../../components/Combobox';

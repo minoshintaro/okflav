@@ -1,7 +1,7 @@
 import { atom } from 'jotai';
 import { atomFamily } from 'jotai/utils';
-import { getData } from '../utils/fetchData';
-import type { SampleProduct, SamplePost } from '../api/sample';
+import { getData } from '../../utils/fetchData';
+import type { SampleProduct, SamplePost } from '../../api/sample';
 
 export const cachedBrandDataAtom = atom<Turso.BrandData | null>(null);
 export const cachedProductDataAtom = atom<Turso.ProductData | null>(null);

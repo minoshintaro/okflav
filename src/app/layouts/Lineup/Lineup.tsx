@@ -1,6 +1,6 @@
 // import * as React from 'react';
 import { useAtomValue } from 'jotai';
-import { lineupAtom } from '../../../store/atom';
+import { lineupAtom } from '../../store/atom';
 import { SearchField } from "../../components/SearchField";
 
 export function Lineup() {
