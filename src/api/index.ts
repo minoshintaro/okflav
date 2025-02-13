@@ -11,7 +11,7 @@ import { users } from './users';
 
 export const runtime = 'edge'
 
-const app = new Hono().basePath('/api');
+const app = new Hono().basePath(process.env.VERCEL ? '' : '/api');
 
 if (!process.env.VERCEL) {
   const server = serve({
