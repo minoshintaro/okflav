@@ -22,6 +22,13 @@ export default defineConfig({
         app: resolve(__dirname, 'index.html'),
         api: resolve(__dirname, 'src/api/index.ts'),
       },
+      external: [
+        '@hono/node-server',
+        'stream',
+        'http',
+        'http2',
+        'crypto'
+      ],
       output: {
         // API 用のエントリーポイントは /api フォルダへ、それ以外は assets/ に出力
         entryFileNames: (chunkInfo) => {
