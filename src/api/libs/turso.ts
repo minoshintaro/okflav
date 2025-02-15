@@ -1,9 +1,11 @@
 import { createClient, type ResultSet } from "@libsql/client";
 import { TABLES } from "../../constants";
 
+console.log('test', );
+
 export const turso = createClient({
-  url: process.env.TURSO_DATABASE_URL!,
-  authToken: process.env.TURSO_AUTH_TOKEN!,
+  url: import.meta.env.VITE_TURSO_URL!,
+  authToken: import.meta.env.VITE_TURSO_AUTH_TOKEN!,
 });
 
 export async function findTargetId(

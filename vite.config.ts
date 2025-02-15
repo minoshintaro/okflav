@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite'
-import { resolve } from 'path'
+import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { resolve } from 'path';
 
-export default defineConfig({
+const settings = {
   server: {
     port: 5173,
     strictPort: true,
@@ -16,33 +16,22 @@ export default defineConfig({
       },
     },
   },
-  build: {
-    rollupOptions: {
-      input: {
-        app: resolve(__dirname, 'index.html'),
-        api: resolve(__dirname, 'src/api/index.ts'),
-      },
-      external: [
-        '@hono/node-server',
-        'stream',
-        'http',
-        'http2',
-        'crypto'
-      ],
-      output: {
-        // API 用のエントリーポイントは /api フォルダへ、それ以外は assets/ に出力
-        entryFileNames: (chunkInfo) => {
-          if (chunkInfo.name === 'api') {
-            return 'api/[name].js'
-          }
-          return 'assets/[name]-[hash].js'
-        },
-      },
-    },
-  },
   plugins: [
     react(),
     tailwindcss(),
     TanStackRouterVite(),
   ],
-})
+};
+
+export default defineConfig(({ mode }) => {
+  if (mode === 'development') {
+    return {
+      server: settings.server,
+      plugins: settings.plugins,
+    };
+  } else {
+    return {
+      plugins: settings.plugins,
+    };
+  }
+});

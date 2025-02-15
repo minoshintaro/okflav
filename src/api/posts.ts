@@ -1,21 +1,12 @@
 import { Hono } from 'hono';
-// import { cors } from 'hono/cors'
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+import { zValidator } from '@hono/zod-validator';
 import { DUMMY_ID } from '../constants';
+import { postSchema } from '../types/schemas';
 import { turso, addRecord, findTargetId } from './libs/turso';
 
 const app = new Hono();
 
-const postSchema = z.object({
-  areaId: z.number().int(),
-  brandId: z.number().int(),
-  brandName: z.string(),
-  productId: z.number().int(),
-  productName: z.string(),
-  userName: z.string(),
-  message: z.string(),
-});
+
 
 app.post('/', zValidator('json', postSchema), async (c) => {
   const { areaId, brandId, brandName, productId, productName, userName, message } = c.req.valid('json');

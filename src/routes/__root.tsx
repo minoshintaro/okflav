@@ -19,7 +19,7 @@ export const Route = createRootRoute({
           <PlusIcon className="size-8" />
         </CircleButton>
       </nav>
-      <TanStackRouterDevtools />
+
     </>
   ),
 });

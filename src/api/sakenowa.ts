@@ -1,15 +1,10 @@
 import { Hono, type Context } from 'hono';
 import { getData } from "../utils";
 
-interface SakenowaData {
-  copyright: string;
-}
-
-const SAKE_API_BASE = process.env.SAKENOWA_ENDPOINT!;
 const app = new Hono();
 
 async function getDataAndRespond<T extends Record<string, any>>(c: Context, endpoint: string) {
-  const response = await getData<SakenowaData & T>(`${SAKE_API_BASE}/${endpoint}`);
+  const response = await getData<T & { copyright: string }>(`https://muro.sakenowa.com/sakenowa-data/api/${endpoint}`);
   return c.json(response);
 }
 

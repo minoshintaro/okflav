@@ -120,14 +120,7 @@ export function Post() {
 
   return (
     <>
-      <details open className="mb-4 text-xs">
-        <summary>Debug</summary>
-        <pre>Turso: {JSON.stringify(brandData)}</pre>
-        <pre>Brand: {JSON.stringify(selectedBrand,)} <span className="text-blue-600">{JSON.stringify(cachedBrandData, null, '  ')}</span></pre>
-        <pre>Products: <span className="text-blue-600">{JSON.stringify(productList, null, '  ')}</span></pre>
-        <pre>Product: <span className="text-blue-600">{JSON.stringify(cachedProductData, null, '  ')}</span></pre>
-        <pre>User: <span className="text-blue-600">{JSON.stringify(signature, null, '  ')}</span></pre>
-      </details>
+
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-y-6">
         <div className="flex flex-col gap-y-2">
@@ -159,6 +152,14 @@ export function Post() {
         </div>
         <Button type="submit">投稿</Button>
       </form>
+      <details className="my-4 text-xs">
+        <summary>Debug</summary>
+        <pre>Turso: {JSON.stringify(brandData)}</pre>
+        <pre>Brand: {JSON.stringify(selectedBrand,)} <span className="text-blue-600">{JSON.stringify(cachedBrandData, null, '  ')}</span></pre>
+        <pre>Products: <span className="text-blue-600">{JSON.stringify(productList, null, '  ')}</span></pre>
+        <pre>Product: <span className="text-blue-600">{JSON.stringify(cachedProductData, null, '  ')}</span></pre>
+        <pre>User: <span className="text-blue-600">{JSON.stringify(signature, null, '  ')}</span></pre>
+      </details>
       <aside className='my-12'>
         <p className="text-xs text-gray-400">
           ※銘柄一覧に「<a href="https://sakenowa.com" target="_blank" className="underline underline-offset-2">さけのわデータ</a>」を利用しています

@@ -16,8 +16,8 @@ const products: SampleProduct[] = [
   { id: 5, brandName: 'あさ開', name: '純米酒 黄ラベル', area: '岩手' },
   { id: 6, brandName: '亀齢', name: '辛口純米', area: '広島' },
   { id: 7, brandName: '酔鯨', name: '純米吟醸 吟麗 秋あがり', area: '高知' },
-  { id: 8, brandName: '鍋島', name: '特別純米 三十六萬石', area: '佐賀' },
-  { id: 9, brandName: '大納川', name: '純米', area: '秋田' },
+  // { id: 8, brandName: '鍋島', name: '特別純米 三十六萬石', area: '佐賀' },
+  // { id: 9, brandName: '大納川', name: '純米', area: '秋田' },
 ];
 
 export type SamplePost = {

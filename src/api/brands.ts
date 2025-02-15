@@ -1,23 +1,18 @@
 import { Hono } from 'hono';
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+import { zValidator } from '@hono/zod-validator';
+import { brandSchema } from '../types/schemas';
 import { turso, addRecord } from './libs/turso';
 
 const app = new Hono();
 
-const brandSchema = z.object({
-  area_id: z.coerce.number().int(),
-  name: z.string(),
-});
-
 app.post('/', zValidator('json', brandSchema), async (c) => {
-  const { area_id, name } = c.req.valid('json');
+  const { areaId, name } = c.req.valid('json');
 
   try {
     const { rows } = await addRecord(
       'brands',
       ['area_id', 'name'],
-      [area_id ?? null, name]
+      [areaId ?? null, name]
     );
     return c.json({ message: '銘柄を追加', data: rows[0] });
   } catch (error) {

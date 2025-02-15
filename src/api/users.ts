@@ -1,13 +1,9 @@
 import { Hono } from 'hono';
-import { z } from 'zod'
-import { zValidator } from '@hono/zod-validator'
+import { zValidator } from '@hono/zod-validator';
+import { userSchema } from '../types/schemas';
 import { turso, addRecord } from './libs/turso';
 
 const app = new Hono();
-
-const userSchema = z.object({
-  name: z.string(),
-});
 
 app.post('/', zValidator('json', userSchema), async (c) => {
   const { name } = c.req.valid('json');
