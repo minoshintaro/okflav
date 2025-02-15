@@ -8,12 +8,11 @@ async function fetchData<T>(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeout);
 
-  try {
-    // APIのリクエスト先
-    const queryString = new URLSearchParams(query).toString();
-    const url = queryString ? `${endpoint}?${queryString}` : endpoint;
+  // APIのリクエスト先
+  const queryString = new URLSearchParams(query).toString();
+  const url = queryString ? `${endpoint}?${queryString}` : endpoint;
 
-    // リクエストの結果
+  try {
     const response = await fetch(url, { ...options, signal: controller.signal });
 
     if (!response.ok) {

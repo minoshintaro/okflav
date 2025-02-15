@@ -1,27 +1,12 @@
 import { useQueries } from "@tanstack/react-query";
 
-export type SakenowaData = {
-  areas: Sakenowa.Area[];
-  breweries: Sakenowa.Brewery[];
-  brands: Sakenowa.Brand[];
-};
-
-async function fetchAreas() {
-  const res = await fetch("/api/sakenowa/areas");
+async function fetchSakenowaData<T>(endpoint: string): Promise<T> {
+  const res = await fetch(`/api/sakenowa/${endpoint}`);
+  if (!res.ok) {
+    throw new Error(`[Sakenowa] Failed to fetch ${endpoint}`);
+  }
   const data = await res.json();
-  return data.areas;
-}
-
-async function fetchBreweries() {
-  const res = await fetch("/api/sakenowa/breweries");
-  const data = await res.json();
-  return data.breweries;
-}
-
-async function fetchBrands() {
-  const res = await fetch("/api/sakenowa/brands");
-  const data = await res.json();
-  return data.brands;
+  return data;
 }
 
 export function useSakenowaData() {
@@ -29,26 +14,26 @@ export function useSakenowaData() {
     queries: [
       {
         queryKey: ["sakenowa", "areas"],
-        queryFn: fetchAreas,
+        queryFn: () => fetchSakenowaData<Sakenowa.AreaData>('areas'),
         staleTime: 1000 * 60 * 60, // 60分間キャッシュ
       },
       {
         queryKey: ["sakenowa", "breweries"],
-        queryFn: fetchBreweries,
+        queryFn: () => fetchSakenowaData<Sakenowa.BreweryData>('breweries'),
         staleTime: 1000 * 60 * 60,
       },
       {
         queryKey: ["sakenowa", "brands"],
-        queryFn: fetchBrands,
+        queryFn: () => fetchSakenowaData<Sakenowa.BrandData>('brands'),
         staleTime: 1000 * 60 * 60,
       },
     ],
   });
 
   return {
-    areas: results[0].data ?? [],
-    breweries: results[1].data ?? [],
-    brands: results[2].data ?? [],
+    areas: results[0].data?.areas ?? [],
+    breweries: results[1].data?.breweries ?? [],
+    brands: results[2].data?.brands ?? [],
     isLoading: results.some((res) => res.isLoading),
     isError: results.some((res) => res.isError),
   };

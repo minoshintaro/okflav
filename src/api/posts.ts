@@ -1,14 +1,15 @@
 import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { DUMMY_ID } from '../constants';
-import { postSchema } from '../types/schemas';
+import { newPostSchema } from '../types/schemas';
 import { turso, addRecord, findTargetId } from './libs/turso';
 
 const app = new Hono();
 
+app.post('/', zValidator('json', newPostSchema), async (c) => {
+  const body = await c.req.json();
+  console.log('Received data:', body);
 
-
-app.post('/', zValidator('json', postSchema), async (c) => {
   const { areaId, brandId, brandName, productId, productName, userName, message } = c.req.valid('json');
 
   try {

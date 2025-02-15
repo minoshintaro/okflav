@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "run-p dev:api dev:app",
-    "dev:api": "cross-env $(cat .env.local | xargs) tsx watch src/api/index.ts",
+    "dev:api": "tsx watch --env-file=.env.local src/api/index.ts",
     "dev:app": "vite",
     "build": "tsc -b && vite build",
     "deploy": "npm run build && vercel",
@@ -21,6 +21,7 @@
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-query": "^5.66.0",
     "@tanstack/react-router": "^1.102.5",
+    "axios": "^1.7.9",
     "hono": "^4.7.0",
     "jotai": "^2.12.0",
     "react": "^19.0.0",

@@ -1,9 +1,10 @@
 import { z } from "zod";
-import { areaSchema, brandSchema, postSchema, productSchema, userSchema } from "./schemas";
+import { areaSchema, brandSchema,newPostSchema, postSchema, productSchema, userSchema } from "./schemas";
 
 declare global {
   type Area = z.infer<typeof areaSchema>;
   type Brand = z.infer<typeof brandSchema>;
+  type NewPost = z.infer<typeof newPostSchema>;
   type Post = z.infer<typeof postSchema>;
   type Product = z.infer<typeof productSchema>;
   type User = z.infer<typeof userSchema>;
@@ -11,8 +12,8 @@ declare global {
   namespace Turso {
     type AreaData = Area & { id: number };
     type BrandData = Brand & { id: number };
-    type ProductData = Product & { id: number; createdAt: string; };
     type PostData = Post & { id: number; createdAt: string; updatedAt: string; };
+    type ProductData = Product & { id: number; createdAt: string; };
     type UserData = User & { id: number };
   }
 
@@ -48,41 +49,14 @@ declare global {
       brandId: number;
       tagIds: number[];
     }
+
+    type AreaData = { copyright: string, areas: Area[] };
+    type BrandData = { copyright: string, brands: Brand[] };
+    type BreweryData = { copyright: string, breweries: Brewery[] };
+    type FlavorChartData = { copyright: string, flavorCharts: FlavorChart[] };
+    type FlavorTagData = { copyright: string, tags: FlavorTag[] };
+    type BrandFlavorTagData = { copyright: string, flavorTags: BrandFlavorTag[] };
   }
 }
-
-
-
-
-// interface Area {
-//   name: string;
-// }
-// interface Brand {
-//   name: string;
-//   areaId: number;
-// }
-// interface Product {
-//   name: string;
-//   brandId: number;
-// }
-// interface Post {
-//   productId: number;
-//   userId: number;
-//   message: string;
-// }
-// interface NewPost {
-//   areaId: number;
-//   brandId: number;
-//   brandName: string;
-//   productId: number;
-//   productName: string;
-//   userName: string;
-//   message: string;
-// }
-
-
-// Sakenowa ========================================
-
-
 
 export {};
