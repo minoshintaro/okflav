@@ -1,42 +1,40 @@
 import { useQuery } from '@tanstack/react-query';
 
+async function fetchTursoData<T>(endpoint: string): Promise<T> {
+  const response = await fetch(`/api/${endpoint}`);
+  if (!response.ok) {
+    throw new Error(`[Turso] Failed to fetch ${endpoint}`);
+  }
+  const data = await response.json() as T;
+  return data;
+}
+
 export function useBrandData(brandName: string | null) {
-  const url = brandName ? `/api/brands?name=${encodeURIComponent(brandName)}` : '/api/brands';
-
-  return useQuery({
+  const endpoint = brandName ? `brands?name=${encodeURIComponent(brandName)}` : 'brands';
+  const results = useQuery({
     queryKey: ['brands', brandName],
-    queryFn: async () => {
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.error(`[HTTP Error] ${response.status} at ${url}`);
-        throw new Error(`[HTTP Error] ${response.status}`);
-      }
-
-      const data = await response.json();
-      if (!data) {
-        console.warn(`[Warning] API returned unexpected response:`, data);
-        return []; // `undefined` ではなく空配列を返す
-      }
-      return data;
-    },
-    enabled: !!brandName && brandName.trim() !== '', // null や "" を防ぐ
+    queryFn: () => fetchTursoData<Turso.BrandData[]>(endpoint),
+    enabled: !!brandName && brandName.trim() !== '',
   });
+
+  return {
+    data: results.data ?? [],
+    isLoading: results.isLoading,
+    isError: results.isError,
+  };
 }
 
 export function useProductList(brandId: number | null) {
-  const url = brandId ? `/api/products?brand_id=${brandId}` : '/api/products';
-
-  return useQuery({
+  const endpoint = brandId ? `products?brand_id=${brandId}` : 'products';
+  const results = useQuery({
     queryKey: ['products', brandId],
-    queryFn: async () => {
-      const response = await fetch(url);
-      if (!response.ok) {
-        console.error(`[HTTP Error] ${response.status} at ${url}`);
-        throw new Error(`[HTTP Error] ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    },
-    enabled: brandId !== undefined,
+    queryFn: () => fetchTursoData<Turso.ProductData[]>(endpoint),
+    enabled: !!brandId,
   });
+
+  return {
+    data: results.data ?? [],
+    isLoading: results.isLoading,
+    isError: results.isError,
+  };
 }

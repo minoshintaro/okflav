@@ -1,11 +1,11 @@
 import { useQueries } from "@tanstack/react-query";
 
 async function fetchSakenowaData<T>(endpoint: string): Promise<T> {
-  const res = await fetch(`/api/sakenowa/${endpoint}`);
-  if (!res.ok) {
+  const response = await fetch(`/api/sakenowa/${endpoint}`);
+  if (!response.ok) {
     throw new Error(`[Sakenowa] Failed to fetch ${endpoint}`);
   }
-  const data = await res.json();
+  const data = await response.json();
   return data;
 }
 

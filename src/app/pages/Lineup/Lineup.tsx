@@ -1,12 +1,10 @@
 // import * as React from 'react';
 import { useAtomValue } from 'jotai';
-import { useSakenowaData } from '../../hooks';
 import { lineupAtom } from '../../store/atom';
 import { SearchField } from "../../components/SearchField";
 
 export function Lineup() {
   const products = useAtomValue(lineupAtom);
-  const { areas, breweries, brands, isLoading, isError } = useSakenowaData();
 
   return (
     <div className="space-y-8">
@@ -22,9 +20,6 @@ export function Lineup() {
           </a>
         ))}
       </div>
-      <pre className="text-xs">
-        {JSON.stringify({ areas, breweries, brands, isLoading, isError }, null, 2)}
-      </pre>
     </div>
   );
 }

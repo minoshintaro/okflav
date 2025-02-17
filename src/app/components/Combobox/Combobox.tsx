@@ -1,42 +1,45 @@
-import * as React from 'react';
 import * as Headless from '@headlessui/react';
 import { DUMMY_ID } from '../../../constants';
 import { filterList } from './utils';
 
 type ComboboxProps<T extends { id: number; name: string }> = {
   placeholder: string;
+  query: string;
   list: T[];
-  current: T | null;
-  onCurrentChange: (value: T | null) => void;
+  value: T | null;
+  onQueryChange: (query: string) => void;
+  onValueChange: (selection: T | null) => void;
 };
 
 export function Combobox<T extends { id: number; name: string }>({
   placeholder,
+  query,
   list,
-  current,
-  onCurrentChange,
+  value,
+  onQueryChange,
+  onValueChange,
 }: ComboboxProps<T>) {
-  const [query, setQuery] = React.useState('');
-  const filteredList = filterList<T>(list, query);
+  const newItem = { id: DUMMY_ID, name: query } as T;
+  const filteredList = filterList<T>(list, newItem, query);
 
   // Event handlers ==========================================
 
   const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(event.target.value);
+    onQueryChange(event.target.value);
   };
 
-  const handleCurrentChange = (item: T | null) => {
-    onCurrentChange(item);
+  const handleValueChange = (selection: T | null) => {
+    onValueChange(selection);
   };
 
   const handleClose = () => {
-    setQuery('');
+    onQueryChange('');
   };
 
   return (
     <Headless.Combobox
-      value={current}
-      onChange={handleCurrentChange} // (value: T) => void
+      value={value}
+      onChange={handleValueChange} // (value: T) => void
       onClose={handleClose} // () => void
       immediate={true}
     >

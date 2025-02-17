@@ -11,12 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TestImport } from './routes/test'
 import { Route as PostImport } from './routes/post'
 import { Route as FormImport } from './routes/form'
 import { Route as IndexImport } from './routes/index'
 import { Route as CollectionCategoryImport } from './routes/collection.$category'
 
 // Create/Update Routes
+
+const TestRoute = TestImport.update({
+  id: '/test',
+  path: '/test',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const PostRoute = PostImport.update({
   id: '/post',
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PostImport
       parentRoute: typeof rootRoute
     }
+    '/test': {
+      id: '/test'
+      path: '/test'
+      fullPath: '/test'
+      preLoaderRoute: typeof TestImport
+      parentRoute: typeof rootRoute
+    }
     '/collection/$category': {
       id: '/collection/$category'
       path: '/collection/$category'
@@ -83,6 +97,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/form': typeof FormRoute
   '/post': typeof PostRoute
+  '/test': typeof TestRoute
   '/collection/$category': typeof CollectionCategoryRoute
 }
 
@@ -90,6 +105,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/form': typeof FormRoute
   '/post': typeof PostRoute
+  '/test': typeof TestRoute
   '/collection/$category': typeof CollectionCategoryRoute
 }
 
@@ -98,15 +114,16 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/form': typeof FormRoute
   '/post': typeof PostRoute
+  '/test': typeof TestRoute
   '/collection/$category': typeof CollectionCategoryRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/form' | '/post' | '/collection/$category'
+  fullPaths: '/' | '/form' | '/post' | '/test' | '/collection/$category'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/form' | '/post' | '/collection/$category'
-  id: '__root__' | '/' | '/form' | '/post' | '/collection/$category'
+  to: '/' | '/form' | '/post' | '/test' | '/collection/$category'
+  id: '__root__' | '/' | '/form' | '/post' | '/test' | '/collection/$category'
   fileRoutesById: FileRoutesById
 }
 
@@ -114,6 +131,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   FormRoute: typeof FormRoute
   PostRoute: typeof PostRoute
+  TestRoute: typeof TestRoute
   CollectionCategoryRoute: typeof CollectionCategoryRoute
 }
 
@@ -121,6 +139,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   FormRoute: FormRoute,
   PostRoute: PostRoute,
+  TestRoute: TestRoute,
   CollectionCategoryRoute: CollectionCategoryRoute,
 }
 
@@ -137,6 +156,7 @@ export const routeTree = rootRoute
         "/",
         "/form",
         "/post",
+        "/test",
         "/collection/$category"
       ]
     },
@@ -148,6 +168,9 @@ export const routeTree = rootRoute
     },
     "/post": {
       "filePath": "post.tsx"
+    },
+    "/test": {
+      "filePath": "test.tsx"
     },
     "/collection/$category": {
       "filePath": "collection.$category.tsx"
